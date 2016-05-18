@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="Film_Choice_Entry_Values">
+        <item>popular</item>
+        <item>top_rated</item>
+    </string-array>
+
+    <string-array name="Film_Choice_Entries">
+        <item>Popular</item>
+        <item>Top User Rated</item>
+    </string-array>
+
+</resources>

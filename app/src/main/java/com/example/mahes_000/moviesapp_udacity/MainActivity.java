@@ -1,6 +1,7 @@
 package com.example.mahes_000.moviesapp_udacity;
 
 // Activity Libraries
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
 // Have to Import External JAR Files for v4.app.FragmentActivity that is when the two libraries will work.
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
         {
+            startActivity(new Intent(this,SettingsActivity.class));
             return true;
         }
 

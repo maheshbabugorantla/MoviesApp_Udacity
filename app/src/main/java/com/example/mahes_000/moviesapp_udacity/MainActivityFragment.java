@@ -3,11 +3,13 @@ package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
 import android.util.Log;
@@ -48,6 +50,9 @@ public class MainActivityFragment extends Fragment {
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
     String[] movie_desc = {"Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah",};
     ArrayList<ImageView> imageViewArrayList = new ArrayList<>();
+
+    // This is used to select between the "popular" and "top_rated"
+    String Movies_Choice = "";
 
     public MainActivityFragment()
     {
@@ -122,7 +127,7 @@ public class MainActivityFragment extends Fragment {
                 stringBuilder.append("=");
                 stringBuilder.append(jsonObject.getString("popularity"));
 
-                Log.i("Movie: ", stringBuilder.toString());
+                //Log.i("Movie: ", stringBuilder.toString());
 
                 Data_movies[index] = stringBuilder.toString();
 
@@ -140,7 +145,7 @@ public class MainActivityFragment extends Fragment {
         for(String s: Data_movies)
         {
             if (s != null) {
-                System.out.println("Inside JSON Function: " + s);
+                //System.out.println("Inside JSON Function: " + s);
             }
         }
         return(Data_movies);
@@ -206,7 +211,7 @@ public class MainActivityFragment extends Fragment {
                 count = count % urls.length;
             }
 
-            getMovieData("popular");
+            getMovieData("top_rated");
         }
 
         // Loading Dummy Images
@@ -245,6 +250,26 @@ public class MainActivityFragment extends Fragment {
         return(rootView);
     }
 
+    // This pull all the data from theMovieDB using the default settings as soon as the app starts
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_choice_key),getString(R.string.pref_choice_default));
+
+        Log.i("MovieApp Movies Choice:", Movies_Choice);
+
+        if(isNetworkAvailable())
+        {
+            getMovieData(Movies_Choice);
+        }
+
+        return;
+    }
+
+    // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
     public class DownloadTask extends AsyncTask<String, Void,String[]>
     {
 
@@ -310,7 +335,7 @@ public class MainActivityFragment extends Fragment {
 
                 Movies_Data = buffer.toString();
 
-                Log.i("TheMovieDB JSON Data:", Movies_Data);
+                //Log.i("TheMovieDB JSON Data:", Movies_Data);
 
                 final_values = getJSONData(Movies_Data);
             }
@@ -359,7 +384,8 @@ public class MainActivityFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
+        protected void onPostExecute(String[] strings)
+        {
             super.onPostExecute(strings);
 
             String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
@@ -371,13 +397,15 @@ public class MainActivityFragment extends Fragment {
             {
                 if (s != null)
                 {
-                    System.out.println(s);
-                    String[] new_data = s.split("=");
+                    //System.out.println(s);
+                    String[] new_data = s.split("=",2);
                     urls[index] = Image_Base_URL + new_data[0];
 
                     // Updated imageView with new Film AlbumArts
                     Picasso.with(getActivity()).load(urls[index]).fit().into(imageViewArrayList.get(index));
-                    movie_desc[index] = new_data[2];
+
+                    // Changing to the latest Story Overview
+                    movie_desc[index] = new_data[1];
                     index += 1;
                 }
             }

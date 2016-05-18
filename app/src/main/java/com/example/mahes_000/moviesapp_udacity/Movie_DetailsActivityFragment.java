@@ -30,7 +30,12 @@ public class Movie_DetailsActivityFragment extends Fragment
         if((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT))
         {
             String text_detail = intent.getStringExtra(Intent.EXTRA_TEXT);
-            ((TextView) rootView.findViewById(R.id.text_detail)).setText(text_detail);
+
+            String[] str_values = text_detail.split("=");
+
+            ((TextView) rootView.findViewById(R.id.movie_title)).setText(str_values[2]); // Movie Title
+            ((TextView) rootView.findViewById(R.id.story_detail)).setText(str_values[1]); // Movie Story
+            ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(str_values[3] + " / 10");
         }
 
         return(rootView);
