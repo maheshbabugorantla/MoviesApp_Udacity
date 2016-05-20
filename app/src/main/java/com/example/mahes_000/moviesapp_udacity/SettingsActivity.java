@@ -32,7 +32,8 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
 
             // Adding the Resources from the settings xml file
             addPreferencesFromResource(R.xml.settings_preferences);
-            new SettingsActivity().bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_choice_key)));
+            new SettingsActivity().bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_rating_choice_key)));
+            new SettingsActivity().bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_video_choice_key)));
         }
     }
 
@@ -49,6 +50,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
     public boolean onPreferenceChange(Preference preference, Object newValue)
     {
         String stringValue = newValue.toString();
+        System.out.println("string Value in onPreferenceChange: " + stringValue);
 
         // For list preferences, look up the correct display value in the preference's entries list (since they have separate labels/values).
         if(preference instanceof ListPreference)

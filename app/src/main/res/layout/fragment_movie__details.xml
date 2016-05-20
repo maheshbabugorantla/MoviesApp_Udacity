@@ -65,10 +65,28 @@
                 android:layout_toEndOf="@+id/user_rating_heading"
                 android:layout_marginLeft="10dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Release Date: "
+                android:id="@+id/release_date"
+                android:layout_below="@+id/user_rating_heading"
+                android:layout_marginTop="20dp"
+                android:textSize="25sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2015"
+                android:id="@+id/release_date_value"
+                android:textSize="25sp"
+                android:layout_alignTop="@+id/release_date"
+                android:layout_toEndOf="@+id/release_date"
+                android:layout_marginLeft="10dp" />
+
         </RelativeLayout>
 
     </ScrollView>
-
 
 
 </RelativeLayout>

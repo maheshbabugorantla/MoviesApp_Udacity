@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
 import android.util.Log;
@@ -53,20 +54,21 @@ public class MainActivityFragment extends Fragment {
 
     // This is used to select between the "popular" and "top_rated"
     String Movies_Choice = "";
+    String Video_Choice = "";
 
     public MainActivityFragment()
     {
         setHasOptionsMenu(true);
     }
 
-    private boolean getMovieData(String movie_choice)
+    private boolean getMovieData(String movie_choice, String video_choice)
     {
 
         DownloadTask downloadTask = new DownloadTask();
 
         try
         {
-            downloadTask.execute(movie_choice).get();
+            downloadTask.execute(movie_choice,video_choice).get();
         }
 
         catch (InterruptedException e)
@@ -117,22 +119,46 @@ public class MainActivityFragment extends Fragment {
 
                 stringBuilder.append(jsonObject.getString("poster_path"));
                 stringBuilder.append("=");
-                stringBuilder.append(jsonObject.getString("adult"));
-                stringBuilder.append("=");
+
+                //stringBuilder.append(jsonObject.getString("adult")); // When you uncomment this please make sure that you change the indexes in Movie_DetailsActivityFragment.java
+                //stringBuilder.append("=");
+
                 stringBuilder.append(jsonObject.getString("overview"));
                 stringBuilder.append("=");
-                stringBuilder.append(jsonObject.getString("title"));
-                stringBuilder.append("=");
+
+                if(Video_Choice.equals("movie"))
+                {
+                    stringBuilder.append(jsonObject.getString("title"));
+                    stringBuilder.append("=");
+                }
+                else if(Video_Choice.equals("tv"))
+                {
+                    stringBuilder.append(jsonObject.getString("name"));
+                    stringBuilder.append("=");
+                }
+
                 stringBuilder.append(jsonObject.getString("vote_average"));
                 stringBuilder.append("=");
                 stringBuilder.append(jsonObject.getString("popularity"));
+                stringBuilder.append("=");
+
+                if(Video_Choice.equals("movie"))
+                {
+                    stringBuilder.append(jsonObject.getString("release_date"));
+                    stringBuilder.append("=");
+                }
+
+                else if(Video_Choice.equals("tv"))
+                {
+                    stringBuilder.append(jsonObject.getString("first_air_date"));
+                    stringBuilder.append("=");
+                }
+
+                stringBuilder.append(Video_Choice); // Giving the Video Choice
 
                 //Log.i("Movie: ", stringBuilder.toString());
 
                 Data_movies[index] = stringBuilder.toString();
-
-                // This clear the StringBuilder Buffer.
-   //             stringBuilder.setLength(0);
             }
         }
 
@@ -211,7 +237,7 @@ public class MainActivityFragment extends Fragment {
                 count = count % urls.length;
             }
 
-            getMovieData("top_rated");
+            getMovieData("top_rated", Video_Choice);
         }
 
         // Loading Dummy Images
@@ -231,9 +257,11 @@ public class MainActivityFragment extends Fragment {
         // Setting the OnClick Listener for the ImageViews
         for (final ImageView imageView : imageViewArrayList)
         {
-            imageView.setOnClickListener(new View.OnClickListener() {
+            imageView.setOnClickListener(new View.OnClickListener()
+            {
                 @Override
-                public void onClick(View v) {
+                public void onClick(View v)
+                {
 
                     // Getting the ID Tag
                     String Movie_Details = imageView.getTag().toString();
@@ -257,13 +285,17 @@ public class MainActivityFragment extends Fragment {
         super.onStart();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_choice_key),getString(R.string.pref_choice_default));
+        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
+        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
 
-        Log.i("MovieApp Movies Choice:", Movies_Choice);
+        System.out.println("Movies Choice " + Movies_Choice);
+        System.out.println("Movies Choice " + Video_Choice);
+
+        //Log.i("MovieApp Movies Choice:", Movies_Choice);
 
         if(isNetworkAvailable())
         {
-            getMovieData(Movies_Choice);
+            getMovieData(Movies_Choice, Video_Choice);
         }
 
         return;
@@ -276,23 +308,24 @@ public class MainActivityFragment extends Fragment {
         @Override
         protected String[] doInBackground(String... urls)
         {
-            String[] parsed_values = getData(urls[0]);
+            String[] parsed_values = getData(urls[0], urls[1]);
 
             return parsed_values;
         }
 
-        public String[] getData(String url) {
+        public String[] getData(String url, String Video_Type) {
 
             HttpURLConnection httpURLConnection = null;
             BufferedReader bufferedReader = null;
 
-            final String MOVIES_BASE_URL = "https://api.themoviedb.org/3/movie/";
+            final String MOVIES_BASE_URL = "https://api.themoviedb.org/3";
+            final String CHOICE_VIDEO = Video_Type;
             final String API_Key = "2117c386bdd865562ccf2a210dfc49ef";
             final String ID = "api_key";
 
             // http://api.themoviedb.org/3/movie/popular?api_key=2117c386bdd865562ccf2a210dfc49ef
 
-            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(url).appendQueryParameter(ID, API_Key).build();
+            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(CHOICE_VIDEO).appendPath(url).appendQueryParameter(ID, API_Key).build();
 
             String BuiltURL = BuiltUri.toString();
 
@@ -393,21 +426,31 @@ public class MainActivityFragment extends Fragment {
             int index = 0;
 
             // Creating the URL List for all the Poster Thumbnails in here
-            for(String s: strings)
+
+            try
             {
-                if (s != null)
+                for (String s : strings)
                 {
-                    //System.out.println(s);
-                    String[] new_data = s.split("=",2);
-                    urls[index] = Image_Base_URL + new_data[0];
+                    if (s != null)
+                    {
+                        //System.out.println(s);
+                        String[] new_data = s.split("=", 2);
+                        urls[index] = Image_Base_URL + new_data[0];
 
-                    // Updated imageView with new Film AlbumArts
-                    Picasso.with(getActivity()).load(urls[index]).fit().into(imageViewArrayList.get(index));
+                        // Updated imageView with new Film AlbumArts
+                        Picasso.with(getActivity()).load(urls[index]).fit().into(imageViewArrayList.get(index));
 
-                    // Changing to the latest Story Overview
-                    movie_desc[index] = new_data[1];
-                    index += 1;
+                        // Changing to the latest Story Overview
+                        movie_desc[index] = new_data[1];
+                        index += 1;
+                    }
                 }
+            }
+
+            catch (NullPointerException e)
+            {
+                e.printStackTrace();
+                Log.e("Accessing Null String", "Null String Array Detected");
             }
 
             return;

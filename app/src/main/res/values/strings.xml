@@ -8,9 +8,14 @@
 
     <!-- App Preferences -->
 
-    <!-- User Movie Category Choices -->
-    <string name="pref_choice_key">Movie Choice</string>
-    <string name="pref_choice_label">Movie Choice</string>
-    <string name="pref_choice_default">popular</string>
+    <!-- User Rating Category Choices -->
+    <string name="pref_rating_choice_key">Rating Choice</string>
+    <string name="pref_rating_choice_label">Rating Choice</string>
+    <string name="pref_rating_choice_default">popular</string>
+
+    <!-- User Video Category Choices -->
+    <string name="pref_video_choice_key">Video Choice</string>
+    <string name="pref_video_choice_label">Video Choice</string>
+    <string name="pref_video_choice_default">movie</string>
 
 </resources>
