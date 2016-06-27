@@ -43,7 +43,7 @@ public class Movie_DetailsActivity extends AppCompatActivity {
 
     public void markAsFavorite(View view)
     {
-        Toast.makeText(this, "Movie added to the Favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Movie added to the Favorites", Toast.LENGTH_LONG).show();
         return;
     }
 }
