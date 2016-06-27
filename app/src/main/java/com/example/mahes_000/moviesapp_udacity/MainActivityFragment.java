@@ -325,8 +325,6 @@ public class MainActivityFragment extends Fragment {
             final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
             final String ID = "api_key";
 
-            // http://api.themoviedb.org/3/movie/popular?api_key=2117c386bdd865562ccf2a210dfc49ef
-
             Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(CHOICE_VIDEO).appendPath(url).appendQueryParameter(ID, API_Key).build();
 
             String BuiltURL = BuiltUri.toString();
@@ -425,7 +423,7 @@ public class MainActivityFragment extends Fragment {
         {
             super.onPostExecute(strings);
 
-            String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
+            String Image_Base_URL = "http://image.tmdb.org/t/p/w342/";
 
             int index = 0;
 
@@ -436,7 +434,7 @@ public class MainActivityFragment extends Fragment {
                 {
                     if (s != null)
                     {
-                        //System.out.println(s);
+                        // Fetching the Poster Image URL
                         String[] new_data = s.split("=", 2);
                         urls[index] = Image_Base_URL + new_data[0];
 
@@ -444,7 +442,7 @@ public class MainActivityFragment extends Fragment {
                         Picasso.with(getActivity()).load(urls[index]).fit().into(imageViewArrayList.get(index));
 
                         // Changing to the latest Story Overview
-                        movie_desc[index] = new_data[1];
+                        movie_desc[index] = s;
                         index += 1;
                     }
                 }

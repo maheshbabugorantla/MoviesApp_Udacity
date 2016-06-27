@@ -6,10 +6,15 @@ import android.net.NetworkInfo;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -56,37 +61,34 @@ public class Movie_DetailsActivityFragment extends Fragment
 
             String[] str_values = text_detail.split("=");
 
-            System.out.println(str_values);
+            String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
+            String Image_URL = Image_Base_URL + str_values[0];
 
-            ((TextView) rootView.findViewById(R.id.movie_title)).setText(str_values[1]); // Movie Title
-            ((TextView) rootView.findViewById(R.id.story_detail)).setText(str_values[0]); // Movie Story
-            ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(str_values[2] + " / 10"); // User Rating Value
+            // Setting the Image for the Poster
+            Picasso.with(getActivity()).load(Image_URL).fit().into((ImageView) rootView.findViewById(R.id.details_poster));
 
-            if(str_values[5].equals("tv"))
-            {
-                ((TextView) rootView.findViewById(R.id.release_date)).setText("First Aired Date: "); // Release Date Indicator
-            }
+            ((TextView) rootView.findViewById(R.id.movie_title)).setText(str_values[2]); // Movie Title
+            ((TextView) rootView.findViewById(R.id.story_detail)).setText(str_values[1]); // Movie Story
+            ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(str_values[3] + "/10"); // User Rating Value
 
-            ((TextView) rootView.findViewById(R.id.release_date_value)).setText(str_values[4]);  // Release Date (Movie) or First Aired Date (TV)
+            ((TextView) rootView.findViewById(R.id.release_date_value)).setText(str_values[5].split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
 
         }
 
         else if((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && !networkStatus)
         {
-            String[] str_values = intent.getStringExtra(Intent.EXTRA_TEXT).split("=");
+            // Setting the Image
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.details_poster);
+            imageView.setImageResource(R.drawable.movie1);
 
             ((TextView) rootView.findViewById(R.id.movie_title)).setText("Blah Blah"); // Movie Title
             ((TextView) rootView.findViewById(R.id.story_detail)).setText("Blah Blah"); // Movie Story
             ((TextView) rootView.findViewById(R.id.user_rating_value)).setText("0.0" + " / 10");
-
-            if(str_values[5].equals("tv"))
-            {
-                ((TextView) rootView.findViewById(R.id.release_date)).setText("First Aired Date: "); // Release Date Indicator
-            }
 
             ((TextView) rootView.findViewById(R.id.release_date_value)).setText("N/A");
         }
 
         return(rootView);
     }
+
 }
