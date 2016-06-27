@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 
 import android.util.Log;
@@ -48,13 +47,13 @@ public class MainActivityFragment extends Fragment {
     View MainView;
 
     // These are all the Dummy Web links and movie descriptions.
-    String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
-    String[] movie_desc = {"Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah",};
+    String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
+    String[] movie_desc = {"Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah"};
     ArrayList<ImageView> imageViewArrayList = new ArrayList<>();
 
     // This is used to select between the "popular" and "top_rated"
-    String Movies_Choice = "";
-    String Video_Choice = "";
+    String Movies_Choice = "top_rated";
+    String Video_Choice = "movies";
 
     public MainActivityFragment()
     {
@@ -83,8 +82,8 @@ public class MainActivityFragment extends Fragment {
         return true;
     }
 
-    private String[] getJSONData(String json_data)  {
-
+    private String[] getJSONData(String json_data)
+    {
         // This will be returned when the parsing doesn't work as expected.
         String[] Data_movies = null;
 
@@ -101,14 +100,14 @@ public class MainActivityFragment extends Fragment {
 
             int maxIndex;
 
-            if(results_obj.length() < 10)
+            if(results_obj.length() < 20)
             {
                 maxIndex = results_obj.length();
             }
 
             else
             {
-                maxIndex = 10;
+                maxIndex = 20;
             }
 
             for(int index = 0; index < maxIndex; index++)
@@ -196,8 +195,39 @@ public class MainActivityFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
-        MainView = rootView;
 
+        rootView = displayMovieData(rootView);
+
+        return(rootView);
+    }
+
+    // This pull all the data from theMovieDB using the default settings as soon as the app starts
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+
+        Log.d("Inside OnStart Function", "onStart Started");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
+        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
+
+//        System.out.println("Movies Choice " + Movies_Choice);
+//        System.out.println("Movies Choice " + Video_Choice);
+
+        //Log.i("MovieApp Movies Choice:", Movies_Choice);
+
+        if(isNetworkAvailable())
+        {
+            getMovieData(Movies_Choice, Video_Choice);
+        }
+
+        return;
+    }
+
+    public View displayMovieData(View rootView)
+    {
         // The Code is below is to make the App work with a web API
 
         /* 1. First Check for Internet Connectivity if not throw a Toast Notification Requesting the User to check for their Internet Connection.
@@ -215,10 +245,10 @@ public class MainActivityFragment extends Fragment {
         boolean NetworkStatus = isNetworkAvailable();
 
         // List of all ImageView IDs
-        int[] array_ids = {R.id.Option_1, R.id.Option_2, R.id.Option_3, R.id.Option_4, R.id.Option_6, R.id.Option_7, R.id.Option_8, R.id.Option_9, R.id.Option_11, R.id.Option_12};
+        int[] array_ids = {R.id.Option_1, R.id.Option_2, R.id.Option_3, R.id.Option_4, R.id.Option_5, R.id.Option_6, R.id.Option_7, R.id.Option_8, R.id.Option_9, R.id.Option_10, R.id.Option_11, R.id.Option_12, R.id.Option_13, R.id.Option_14, R.id.Option_15, R.id.Option_16, R.id.Option_17, R.id.Option_18, R.id.Option_19, R.id.Option_20};
 
         // This is the Link to get all the Popular Movies from MovieDb.
-    //    String popular_movies = "http://api.themoviedb.org/3/movie/popular?api_key=2117c386bdd865562ccf2a210dfc49ef";
+        //    String popular_movies = "http://api.themoviedb.org/3/movie/popular?api_key=2117c386bdd865562ccf2a210dfc49ef";
 
         int count = 0;
 
@@ -228,16 +258,11 @@ public class MainActivityFragment extends Fragment {
             for (int val : array_ids)
             {
                 imageViewArrayList.add((ImageView) rootView.findViewById(val));
-                ImageView imageView_Picasso = (ImageView) rootView.findViewById(val);
-
-                // Here I am using getActivity() because I need the context in the Fragment and Activity extends Context.
-                Picasso.with(getActivity()).load(urls[count]).fit().into(imageView_Picasso);
 
                 count += 1;
                 count = count % urls.length;
             }
 
-            getMovieData("top_rated", Video_Choice);
         }
 
         // Loading Dummy Images
@@ -278,29 +303,6 @@ public class MainActivityFragment extends Fragment {
         return(rootView);
     }
 
-    // This pull all the data from theMovieDB using the default settings as soon as the app starts
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
-        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
-
-        System.out.println("Movies Choice " + Movies_Choice);
-        System.out.println("Movies Choice " + Video_Choice);
-
-        //Log.i("MovieApp Movies Choice:", Movies_Choice);
-
-        if(isNetworkAvailable())
-        {
-            getMovieData(Movies_Choice, Video_Choice);
-        }
-
-        return;
-    }
-
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
     public class DownloadTask extends AsyncTask<String, Void,String[]>
     {
@@ -320,7 +322,7 @@ public class MainActivityFragment extends Fragment {
 
             final String MOVIES_BASE_URL = "https://api.themoviedb.org/3";
             final String CHOICE_VIDEO = Video_Type;
-            final String API_Key = "2117c386bdd865562ccf2a210dfc49ef";
+            final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
             final String ID = "api_key";
 
             // http://api.themoviedb.org/3/movie/popular?api_key=2117c386bdd865562ccf2a210dfc49ef
@@ -328,6 +330,8 @@ public class MainActivityFragment extends Fragment {
             Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(CHOICE_VIDEO).appendPath(url).appendQueryParameter(ID, API_Key).build();
 
             String BuiltURL = BuiltUri.toString();
+
+            Log.d("Movie URL", BuiltURL);
 
             try
             {
@@ -426,7 +430,6 @@ public class MainActivityFragment extends Fragment {
             int index = 0;
 
             // Creating the URL List for all the Poster Thumbnails in here
-
             try
             {
                 for (String s : strings)
@@ -451,6 +454,12 @@ public class MainActivityFragment extends Fragment {
             {
                 e.printStackTrace();
                 Log.e("Accessing Null String", "Null String Array Detected");
+            }
+
+            catch(ArrayIndexOutOfBoundsException e)
+            {
+                e.printStackTrace();
+                Log.e("Invalid Indices Access" ,"more than 10 images detected");
             }
 
             return;

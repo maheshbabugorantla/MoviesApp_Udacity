@@ -17,124 +17,235 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView android:text="Favorite Movies"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/frontapp_title"
-                android:textStyle="bold"
-                android:textSize="25dp" />
-
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/frontapp_title"
                 android:layout_alignParentStart="true"
                 android:id="@+id/movie_options"
-                android:rowCount="5"
+                android:rowCount="10"
                 android:columnCount="2" >
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
                     android:id="@+id/Option_1"
                     android:layout_row="0"
                     android:layout_column="0"
-                    android:layout_marginTop="40dp"
                     android:src="@drawable/rsz_movie1"
                     android:clickable="true"
-                    android:tag="0"/>
+                    android:tag="0"
+                    android:layout_weight="1"/>
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
                     android:id="@+id/Option_2"
                     android:layout_row="0"
                     android:layout_column="1"
                     android:src="@drawable/movie2"
-                    android:layout_marginTop="40dp"
                     android:clickable="true"
-                    android:tag="1" />
+                    android:tag="1"
+                    android:layout_weight="1"/>
 
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
                     android:id="@+id/Option_3"
                     android:layout_row="1"
                     android:layout_column="0"
                     android:src="@drawable/movie4"
                     android:clickable="true"
-                    android:tag="2" />
+                    android:tag="2"
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
                     android:id="@+id/Option_4"
                     android:layout_row="1"
                     android:layout_column="1"
                     android:src="@drawable/rsz_movie5"
                     android:clickable="true"
-                    android:tag="3" />
+                    android:tag="3"
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_6"
+                    android:id="@+id/Option_5"
                     android:layout_row="2"
                     android:layout_column="0"
                     android:src="@drawable/rsz_movie7"
                     android:clickable="true"
-                    android:tag="4" />
+                    android:tag="4"
+                    android:layout_weight="1"/>
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_7"
+                    android:id="@+id/Option_6"
                     android:layout_row="2"
                     android:layout_column="1"
                     android:src="@drawable/rsz_movie8"
                     android:clickable="true"
-                    android:tag="5" />
+                    android:tag="5"
+                    android:layout_weight="1"/>
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_8"
+                    android:id="@+id/Option_7"
                     android:layout_row="3"
                     android:layout_column="0"
                     android:src="@drawable/rsz_movie9"
                     android:clickable="true"
-                    android:tag="6" />
+                    android:tag="6"
+                    android:layout_weight="1"/>
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_9"
+                    android:id="@+id/Option_8"
                     android:layout_row="3"
                     android:layout_column="1"
                     android:src="@drawable/rsz_movie10"
                     android:clickable="true"
-                    android:tag="7" />
+                    android:tag="7"
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_11"
+                    android:id="@+id/Option_9"
                     android:layout_row="4"
                     android:layout_column="0"
                     android:src="@drawable/movie11"
                     android:clickable="true"
-                    android:tag="8" />
+                    android:tag="8"
+                    android:layout_weight="1" />
 
                 <ImageView
-                    android:layout_width="165dp"
+                    android:layout_width="180dp"
                     android:layout_height="220dp"
-                    android:id="@+id/Option_12"
+                    android:id="@+id/Option_10"
                     android:layout_row="4"
                     android:layout_column="1"
                     android:src="@drawable/movie12"
                     android:clickable="true"
-                    android:tag="9" />
+                    android:tag="9"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_11"
+                    android:layout_row="5"
+                    android:layout_column="0"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="10"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_12"
+                    android:layout_row="5"
+                    android:layout_column="1"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="11"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_13"
+                    android:layout_row="6"
+                    android:layout_column="0"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="12"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_14"
+                    android:layout_row="6"
+                    android:layout_column="1"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="13"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_15"
+                    android:layout_row="7"
+                    android:layout_column="0"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="14"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_16"
+                    android:layout_row="7"
+                    android:layout_column="1"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="15"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_17"
+                    android:layout_row="8"
+                    android:layout_column="0"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="16"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_18"
+                    android:layout_row="8"
+                    android:layout_column="1"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="17"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_19"
+                    android:layout_row="9"
+                    android:layout_column="0"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="18"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="180dp"
+                    android:layout_height="220dp"
+                    android:id="@+id/Option_20"
+                    android:layout_row="9"
+                    android:layout_column="1"
+                    android:src="@drawable/rsz_movie1"
+                    android:clickable="true"
+                    android:tag="19"
+                    android:layout_weight="1"/>
 
             </GridLayout>
         </FrameLayout>
