@@ -1,4 +1,5 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,13 +14,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/gridView"
-        android:columnWidth="180dp"
-        android:numColumns="2"
+        android:columnWidth="190dp"
+        android:numColumns="auto_fit"
         android:adjustViewBounds="true"
         android:stretchMode="columnWidth"
         android:focusable="true"
         android:clickable="true"
-        android:horizontalSpacing="5dp"
         android:verticalSpacing="5dp" />
 
     <ProgressBar

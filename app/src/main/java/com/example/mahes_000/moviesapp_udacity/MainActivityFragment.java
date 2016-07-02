@@ -368,10 +368,6 @@ public class MainActivityFragment extends Fragment
         {
             super.onPostExecute(strings);
 
-/*
-            String Image_Base_URL = "http://image.tmdb.org/t/p/w342/";
-*/
-
             int index = 0;
 
             // Creating the URL List for all the Poster Thumbnails in here
