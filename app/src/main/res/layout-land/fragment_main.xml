@@ -13,9 +13,10 @@
     <GridView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:id="@+id/gridView"
-        android:columnWidth="190dp"
-        android:numColumns="auto_fit"
+        android:columnWidth="220dp"
+        android:numColumns="3"
         android:adjustViewBounds="true"
         android:stretchMode="columnWidth"
         android:focusable="true"

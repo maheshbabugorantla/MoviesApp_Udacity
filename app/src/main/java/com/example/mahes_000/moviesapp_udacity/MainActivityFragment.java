@@ -48,6 +48,8 @@ public class MainActivityFragment extends Fragment
     private GridViewAdapter gridViewAdapter;
     private ArrayList<ImageItem> mGridData;
 
+    String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
+
     // These are all the Dummy Web links and movie descriptions.
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
     String[] movie_desc = {"Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah"};
@@ -69,6 +71,7 @@ public class MainActivityFragment extends Fragment
         try
         {
             downloadTask.execute(movie_choice,video_choice).get();
+            final_values = getJSONData(Movies_Data);
         }
 
         catch (InterruptedException e)
@@ -246,22 +249,23 @@ public class MainActivityFragment extends Fragment
         {
             mGridData.clear();
             getMovieData(Movies_Choice, Video_Choice);
+            progressBar.setVisibility(View.GONE);
         }
 
         return;
     }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
-    public class DownloadTask extends AsyncTask<String, Void,String[]>
+    public class DownloadTask extends AsyncTask<String, Void, String>
     {
 
         @Override
-        protected String[] doInBackground(String... urls)
+        protected String doInBackground(String... urls)
         {
             return(getData(urls[0], urls[1]));
         }
 
-        public String[] getData(String url, String Video_Type)
+        public String getData(String url, String Video_Type)
         {
             HttpURLConnection httpURLConnection = null;
             BufferedReader bufferedReader = null;
@@ -284,8 +288,6 @@ public class MainActivityFragment extends Fragment
                 httpURLConnection = (HttpURLConnection) web_url.openConnection();
                 httpURLConnection.setRequestMethod("GET"); // Letting the Connection know that the data will be fetched
                 httpURLConnection.connect(); // Connecting to the Web Link
-
-                String Movies_Data; // This will contain the raw JSON Data that needs to parsed.
 
                 // Read the Input Stream into the String
                 InputStream inputStream = httpURLConnection.getInputStream();
@@ -316,8 +318,6 @@ public class MainActivityFragment extends Fragment
                 Movies_Data = buffer.toString();
 
                 //Log.i("TheMovieDB JSON Data:", Movies_Data);
-
-                final_values = getJSONData(Movies_Data);
             }
 
             // This Exception will occur whenever there is MALFORMED URL
@@ -360,13 +360,13 @@ public class MainActivityFragment extends Fragment
                 }
             }
 
-            return(final_values);
+            return(Movies_Data);
         }
 
         @Override
-        protected void onPostExecute(String[] strings)
+        protected void onPostExecute(String string)
         {
-            super.onPostExecute(strings);
+            super.onPostExecute(string);
 
             int index = 0;
 
@@ -376,7 +376,7 @@ public class MainActivityFragment extends Fragment
 
                 gridViewAdapter.setGridData(mGridData);
 
-                for (String s : strings)
+                for (String s : final_values)
                 {
                     if (s != null)
                     {
@@ -385,8 +385,6 @@ public class MainActivityFragment extends Fragment
                         index += 1;
                     }
                 }
-
-                progressBar.setVisibility(View.GONE);
             }
 
             catch (NullPointerException e)
