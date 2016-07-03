@@ -1,7 +1,5 @@
 package com.example.mahes_000.moviesapp_udacity;
 
-import com.example.mahes_000.moviesapp_udacity.ImageItem;
-
 
 import android.content.Context;
 import android.text.Html;
@@ -44,7 +42,7 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem>
     {
 
         View row = convertView;
-        ViewHolder viewHolder = null;
+        ViewHolder viewHolder;
 
         // Reusing the View
         if(row == null)
@@ -75,4 +73,5 @@ public class GridViewAdapter extends ArrayAdapter<ImageItem>
         TextView imageTitle;
         ImageView imageIcon;
     }
+
 }

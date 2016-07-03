@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonArray;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -30,8 +29,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.ExecutionException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -71,12 +68,8 @@ public class Movie_DetailsActivityFragment extends Fragment
 
         boolean networkStatus = isNetworkAvailable();
 
-//        boolean flag_data_updated = false;
-
         if((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && networkStatus)
         {
-//            flag_data_updated = true;
-
             String text_detail = intent.getStringExtra(Intent.EXTRA_TEXT);
 
             String[] str_values = text_detail.split("=");

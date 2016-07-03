@@ -48,11 +48,14 @@ public class MainActivityFragment extends Fragment
     private GridViewAdapter gridViewAdapter;
     private ArrayList<ImageItem> mGridData;
 
+    private int page_no = 1;
+
     String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
 
     // These are all the Dummy Web links and movie descriptions.
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
-    String[] movie_desc = {"Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah","Blah, Blah"};
+
+    ArrayList<String> movie_desc = new ArrayList<>();
 
     // This is used to select between the "popular" and "top_rated"
     String Movies_Choice = "top_rated";
@@ -63,14 +66,14 @@ public class MainActivityFragment extends Fragment
         setHasOptionsMenu(true);
     }
 
-    private boolean getMovieData(String movie_choice, String video_choice)
+    private boolean getMovieData(String movie_choice, String video_choice, String page_no)
     {
 
         DownloadTask downloadTask = new DownloadTask();
 
         try
         {
-            downloadTask.execute(movie_choice,video_choice).get();
+            downloadTask.execute(movie_choice,video_choice,page_no).get();
             final_values = getJSONData(Movies_Data);
         }
 
@@ -98,23 +101,10 @@ public class MainActivityFragment extends Fragment
 
             JSONArray results_obj = reader.getJSONArray("results");
 
-
             // Initializing the String Array to store the data for the Individual Movies
             Data_movies = new String[results_obj.length()];
 
-            int maxIndex;
-
-            if(results_obj.length() < 20)
-            {
-                maxIndex = results_obj.length();
-            }
-
-            else
-            {
-                maxIndex = 20;
-            }
-
-            for(int index = 0; index < maxIndex; index++)
+            for(int index = 0; index < results_obj.length(); index++)
             {
                 ImageItem imageItem = new ImageItem();
 
@@ -214,10 +204,9 @@ public class MainActivityFragment extends Fragment
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                ImageItem imageItem = (ImageItem) parent.getItemAtPosition(position);
-                Intent toDetailActivity = new Intent(getActivity(), Movie_DetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc[position]);
+                Intent toDetailActivity = new Intent(getActivity(), Movie_DetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
 
                 startActivity(toDetailActivity);
             }
@@ -226,6 +215,26 @@ public class MainActivityFragment extends Fragment
         progressBar.setVisibility(View.VISIBLE);
 
         return(rootView);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        gridView.setOnScrollListener( new EndlessScrollListener()
+        {
+            @Override
+            public boolean onLoadMore()
+            {
+                    page_no += 1;
+                    return LoadMoreData(Integer.toString(page_no));
+            }
+        });
+    }
+
+    public boolean LoadMoreData(String page)
+    {
+        return(getMovieData(Movies_Choice, Video_Choice, page));
     }
 
     // This pull all the data from theMovieDB using the default settings as soon as the app starts
@@ -247,12 +256,12 @@ public class MainActivityFragment extends Fragment
 
         if(isNetworkAvailable())
         {
-            mGridData.clear();
-            getMovieData(Movies_Choice, Video_Choice);
+            mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
+            movie_desc.clear(); // resetting all Movie Details
+            getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
         }
 
-        return;
     }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
@@ -262,10 +271,10 @@ public class MainActivityFragment extends Fragment
         @Override
         protected String doInBackground(String... urls)
         {
-            return(getData(urls[0], urls[1]));
+            return(getData(urls[0], urls[1], urls[2]));
         }
 
-        public String getData(String url, String Video_Type)
+        public String getData(String url, String Video_Type, String page_no)
         {
             HttpURLConnection httpURLConnection = null;
             BufferedReader bufferedReader = null;
@@ -273,8 +282,9 @@ public class MainActivityFragment extends Fragment
             final String MOVIES_BASE_URL = "https://api.themoviedb.org/3";
             final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
             final String ID = "api_key";
+            final String Page = "page";
 
-            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(url).appendQueryParameter(ID, API_Key).build();
+            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(url).appendQueryParameter(ID, API_Key).appendQueryParameter(Page,page_no).build();
 
             String BuiltURL = BuiltUri.toString();
 
@@ -368,12 +378,9 @@ public class MainActivityFragment extends Fragment
         {
             super.onPostExecute(string);
 
-            int index = 0;
-
             // Creating the URL List for all the Poster Thumbnails in here
             try
             {
-
                 gridViewAdapter.setGridData(mGridData);
 
                 for (String s : final_values)
@@ -381,12 +388,10 @@ public class MainActivityFragment extends Fragment
                     if (s != null)
                     {
                         // Changing to the latest Story Overview
-                        movie_desc[index] = s;
-                        index += 1;
+                        movie_desc.add(s);
                     }
                 }
             }
-
             catch (NullPointerException e)
             {
                 e.printStackTrace();
@@ -399,7 +404,6 @@ public class MainActivityFragment extends Fragment
                 Log.e("Invalid Indices Access" ,"more than 10 images detected");
             }
 
-            return;
         }
     }
 
