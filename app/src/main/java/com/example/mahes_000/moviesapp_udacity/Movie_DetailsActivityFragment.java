@@ -114,6 +114,7 @@ public class Movie_DetailsActivityFragment extends Fragment
             ((TextView) rootView.findViewById(R.id.user_rating_value)).setText("0.0" + " / 10");
 
             ((TextView) rootView.findViewById(R.id.release_date_value)).setText("N/A");
+            ((TextView) rootView.findViewById(R.id.movie_length)).setText("0 min");
         }
 
         return(rootView);

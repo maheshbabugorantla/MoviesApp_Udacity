@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -208,8 +209,8 @@ public class MainActivityFragment extends Fragment
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                ImageItem imageItem = (ImageItem) parent.getItemAtPosition(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
                 Intent toDetailActivity = new Intent(getActivity(), Movie_DetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
 
                 startActivity(toDetailActivity);
@@ -301,6 +302,15 @@ public class MainActivityFragment extends Fragment
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
             getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
+        }
+        else
+        {
+            mGridData.clear();
+            movie_desc.clear();
+            Toast.makeText(getActivity(),"Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
+/*
+            gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
+*/
         }
     }
 
