@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
@@ -48,9 +49,11 @@ public class MainActivityFragment extends Fragment
     private GridViewAdapter gridViewAdapter;
     private ArrayList<ImageItem> mGridData;
 
-    private int page_no = 1;
-
     String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
+
+    int scrollIndex = 0;
+
+    Parcelable state = null;
 
     // These are all the Dummy Web links and movie descriptions.
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
@@ -202,7 +205,8 @@ public class MainActivityFragment extends Fragment
 
         gridView.setAdapter(gridViewAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                ImageItem imageItem = (ImageItem) parent.getItemAtPosition(position);
@@ -212,25 +216,61 @@ public class MainActivityFragment extends Fragment
             }
         });
 
+        gridView.setOnScrollListener( new EndlessScrollListener()
+        {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount)
+            {
+/*
+                scrollIndex = gridView.getFirstVisiblePosition();
+*/
+
+                if(page == 1)
+                {
+                    return false;
+                }
+                else
+                {
+                    return LoadMoreData(Integer.toString(page));
+                }
+            }
+        });
+
         progressBar.setVisibility(View.VISIBLE);
 
         return(rootView);
     }
 
+    // This function is called when the fragment is available for the user to Start Interacting
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        gridView.setOnScrollListener( new EndlessScrollListener()
+    public void onResume()
+    {
+        if(state != null)
         {
-            @Override
-            public boolean onLoadMore()
-            {
-                    page_no += 1;
-                    return LoadMoreData(Integer.toString(page_no));
-            }
-        });
+            gridView.onRestoreInstanceState(state);
+            Log.d("MainActivityFragment", "trying to restore gridView state..");
+        }
+
+        super.onResume();
+
+/*
+        if(scrollIndex != 0)
+        {
+            gridView.smoothScrollToPosition(scrollIndex);
+        }
+*/
     }
+
+    @Override
+    public void onPause()
+    {
+//        scrollIndex = gridView.getFirstVisiblePosition();
+        state = gridView.onSaveInstanceState();
+        Log.d("MainActivityFragment", "trying to save gridView state..");
+        super.onPause();
+    }
+
+
 
     public boolean LoadMoreData(String page)
     {
@@ -258,10 +298,10 @@ public class MainActivityFragment extends Fragment
         {
             mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
             movie_desc.clear(); // resetting all Movie Details
+            Log.d("MainActivityFragment ", "Inside OnStart() Function");
             getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
         }
-
     }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.

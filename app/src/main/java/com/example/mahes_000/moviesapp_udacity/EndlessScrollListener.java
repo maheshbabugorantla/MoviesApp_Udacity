@@ -1,9 +1,13 @@
 package com.example.mahes_000.moviesapp_udacity;
 
+import android.util.Log;
 import android.widget.AbsListView;
 
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener
 {
+
+    String LOG_TAG = EndlessScrollListener.class.getSimpleName();
+
     // The minimum number of items to have below you current scroll position
     // before loading more
     private int visibleThreshold = 5;
@@ -59,6 +63,8 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             {
                 this.loading = true; // i.e. the Data is still being loaded.
             }
+
+            Log.d(LOG_TAG,"Inside First If");
         }
 
             /* If it is loading let's check if the data items count has changed */
@@ -67,6 +73,8 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             loading = false; // Stop loading the Data
             previousTotalItemCount = totalItemCount;
             currentPage++; // Updating the Current page Number
+
+            Log.d(LOG_TAG,"Inside Second If");
         }
 
             /*
@@ -77,11 +85,17 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             */
         if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) > totalItemCount)
         {
-            loading = onLoadMore();
+            loading = onLoadMore(currentPage + 1, totalItemCount);
+            if(currentPage == 0)
+            {
+                currentPage++;
+            }
+            Log.d(LOG_TAG,"Inside Third If");
+            Log.d(LOG_TAG, "current Page " + Integer.toString(currentPage));
         }
     }
 
-    public abstract boolean onLoadMore();
+    public abstract boolean onLoadMore(int page, int totalItemsCount);
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState)
