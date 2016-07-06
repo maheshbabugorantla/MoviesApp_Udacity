@@ -33,34 +33,30 @@ import java.util.concurrent.ExecutionException;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class Movie_DetailsActivityFragment extends Fragment
-{
+public class MovieDetailsActivityFragment extends Fragment {
     String Movies_Data = null;
     String[] final_values = null;
     String Video_Choice = null;
 
-    public Movie_DetailsActivityFragment()
-    {
+    public MovieDetailsActivityFragment() {
         setHasOptionsMenu(true);
     }
 
-    private boolean isNetworkAvailable()
-    {
+    private boolean isNetworkAvailable() {
         /*
             Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
             Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
             Calling getActivity() will return the Context of the App.
         */
 
-        ConnectivityManager connectivityManager =  (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        return(activeNetworkInfo != null && activeNetworkInfo.isConnected());
+        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Creating a rootView
         View rootView = inflater.inflate(R.layout.fragment_movie__details, container, false);
 
@@ -68,8 +64,7 @@ public class Movie_DetailsActivityFragment extends Fragment
 
         boolean networkStatus = isNetworkAvailable();
 
-        if((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && networkStatus)
-        {
+        if ((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && networkStatus) {
             String text_detail = intent.getStringExtra(Intent.EXTRA_TEXT);
 
             String[] str_values = text_detail.split("=");
@@ -101,10 +96,7 @@ public class Movie_DetailsActivityFragment extends Fragment
             String Run_Time = final_values[0];
 
             ((TextView) rootView.findViewById(R.id.movie_length)).setText(Run_Time + " min");
-        }
-
-        else if((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && !networkStatus)
-        {
+        } else if ((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && !networkStatus) {
             // Setting the Image
             ImageView imageView = (ImageView) rootView.findViewById(R.id.details_poster);
             imageView.setImageResource(R.drawable.movie1);
@@ -117,51 +109,39 @@ public class Movie_DetailsActivityFragment extends Fragment
             ((TextView) rootView.findViewById(R.id.movie_length)).setText("0 min");
         }
 
-        return(rootView);
+        return (rootView);
     }
 
-    private boolean getMovieData(String movie_choice, String video_choice)
-    {
+    private boolean getMovieData(String movie_choice, String video_choice) {
 
         DownloadTask downloadTask = new DownloadTask();
 
-        try
-        {
-            downloadTask.execute(movie_choice,video_choice).get();
+        try {
+            downloadTask.execute(movie_choice, video_choice).get();
 
             final_values = getJSONData(Movies_Data);
-        }
-
-        catch (InterruptedException e)
-        {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
+        } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
         return true;
     }
 
-    private String[] getJSONData(String json_data)
-    {
+    private String[] getJSONData(String json_data) {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        try
-        {
+        try {
             // Parsing the JSON Data in the form of a String
             JSONObject reader = new JSONObject(json_data);
 
             // Fetching the RunTime for the Movie or TV Episode
-            if(Video_Choice.equals("movie"))
-            {
+            if (Video_Choice.equals("movie")) {
                 stringBuilder.append(reader.getString("runtime"));
                 stringBuilder.append("=");
-            }
-            else if(Video_Choice.equals("tv"))
-            {
+            } else if (Video_Choice.equals("tv")) {
                 JSONArray jsonArray = reader.getJSONArray("episode_run_time");
 
                 String run_time = jsonArray.getString(0);
@@ -169,29 +149,23 @@ public class Movie_DetailsActivityFragment extends Fragment
                 stringBuilder.append(run_time);
                 stringBuilder.append("=");
             }
-        }
-
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Log.e("MoviesApp JSONException", " JSONException Occurred in getJSONData Function");
         }
 
-        return(stringBuilder.toString().split("="));
+        return (stringBuilder.toString().split("="));
     }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
-    public class DownloadTask extends AsyncTask<String, Void, String>
-    {
+    public class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
-        protected String doInBackground(String... urls)
-        {
-            return(getData(urls[0], urls[1]));
+        protected String doInBackground(String... urls) {
+            return (getData(urls[0], urls[1]));
         }
 
-        public String getData(String url, String Video_Type)
-        {
+        public String getData(String url, String Video_Type) {
             HttpURLConnection httpURLConnection = null;
             BufferedReader bufferedReader = null;
 
@@ -205,8 +179,7 @@ public class Movie_DetailsActivityFragment extends Fragment
 
             Log.d("Movie URL", BuiltURL);
 
-            try
-            {
+            try {
                 URL web_url = new URL(BuiltURL);
 
                 // Creates a request to TheMovieDB Website and opens the Connection
@@ -219,8 +192,7 @@ public class Movie_DetailsActivityFragment extends Fragment
                 StringBuffer buffer = new StringBuffer();
 
                 // This happens when there is no data being read from the Opened Connection to Web URL.
-                if(inputStream == null)
-                {
+                if (inputStream == null) {
                     return null;
                 }
 
@@ -229,14 +201,12 @@ public class Movie_DetailsActivityFragment extends Fragment
                 String line;
 
                 // Now reading the raw JSON Data into BufferReader
-                while((line=bufferedReader.readLine())!= null)
-                {
+                while ((line = bufferedReader.readLine()) != null) {
                     buffer.append(line);
                 }
 
                 // This might happen when read from URL becomes unsuccessful or may be the connection might drop in between
-                if(buffer.length() == 0)
-                {
+                if (buffer.length() == 0) {
                     return null;
                 }
 
@@ -246,51 +216,39 @@ public class Movie_DetailsActivityFragment extends Fragment
             }
 
             // This Exception will occur whenever there is MALFORMED URL
-            catch (MalformedURLException e)
-            {
+            catch (MalformedURLException e) {
                 e.printStackTrace();
                 Log.e("MoviesApp MalformedURL:", " Malformed URL Exception Occurred");
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
                 Log.e("MoviesApp IOException: ", "IO Exception Occurred");
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("MoviesApp Exception: "," Unknown Exception Occurred");
+                Log.e("MoviesApp Exception: ", " Unknown Exception Occurred");
             }
 
             // Here Closing all the Open Network Connections and the BufferedReaders.
-            finally
-            {
+            finally {
                 // Checking to see if the connection to web URL is still Open. If yes, then close it.
-                if(httpURLConnection != null)
-                {
+                if (httpURLConnection != null) {
                     httpURLConnection.disconnect();
                 }
 
-                if(bufferedReader != null)
-                {
-                    try
-                    {
+                if (bufferedReader != null) {
+                    try {
                         bufferedReader.close();
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         e.printStackTrace();
                         Log.e("MoviesApp IOException: ", " IO Exception occurred while closing the reader");
                     }
                 }
             }
 
-            return(Movies_Data);
+            return (Movies_Data);
         }
 
         @Override
-        protected void onPostExecute(String string)
-        {
+        protected void onPostExecute(String string) {
             super.onPostExecute(string);
 /*
 

@@ -54,7 +54,8 @@ public class MainActivityFragment extends Fragment
 
     int scrollIndex = 0;
 
-    Parcelable state = null;
+    private Parcelable gridState = null;
+    private static final String LIST_STATE = "liststate";
 
     // These are all the Dummy Web links and movie descriptions.
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
@@ -119,7 +120,7 @@ public class MainActivityFragment extends Fragment
                 stringBuilder.append(jsonObject.getString("poster_path"));
                 stringBuilder.append("=");
 
-                //stringBuilder.append(jsonObject.getString("adult")); // When you uncomment this please make sure that you change the indexes in Movie_DetailsActivityFragment.java
+                //stringBuilder.append(jsonObject.getString("adult")); // When you uncomment this please make sure that you change the indexes in MovieDetailsActivityFragment.java
                 //stringBuilder.append("=");
 
                 stringBuilder.append(jsonObject.getString("overview"));
@@ -211,27 +212,22 @@ public class MainActivityFragment extends Fragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                Intent toDetailActivity = new Intent(getActivity(), Movie_DetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
+                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
 
                 startActivity(toDetailActivity);
             }
         });
 
-        gridView.setOnScrollListener( new EndlessScrollListener()
-        {
+        gridView.setOnScrollListener(new EndlessScrollListener() {
             @Override
-            public boolean onLoadMore(int page, int totalItemsCount)
-            {
+            public boolean onLoadMore(int page, int totalItemsCount) {
 /*
                 scrollIndex = gridView.getFirstVisiblePosition();
 */
 
-                if(page == 1)
-                {
+                if (page == 1) {
                     return false;
-                }
-                else
-                {
+                } else {
                     return LoadMoreData(Integer.toString(page));
                 }
             }
@@ -242,22 +238,41 @@ public class MainActivityFragment extends Fragment
         return(rootView);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState)
+    {
+        super.onActivityCreated(savedInstanceState);
+        if (savedInstanceState != null)
+        {
+            gridState = savedInstanceState.getParcelable(LIST_STATE);
+            Log.d("In onActivityCreated", "Retrieving the Saved Instance State");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle state)
+    {
+        super.onSaveInstanceState(state);
+        Log.d("In OnSaveInstanceState", "Saving the state of the app");
+        gridState = gridView.onSaveInstanceState();
+        state.putParcelable(LIST_STATE, gridState);
+    }
+
     // This function is called when the fragment is available for the user to Start Interacting
     @Override
     public void onResume()
     {
-        if(state != null)
+        if(gridState != null)
         {
-            gridView.onRestoreInstanceState(state);
+            gridView.onRestoreInstanceState(gridState);
             Log.d("MainActivityFragment", "trying to restore gridView state..");
         }
-
+        gridState = null;
         super.onResume();
-
 /*
         if(scrollIndex != 0)
         {
-            gridView.smoothScrollToPosition(scrollIndex);
+            gridView.thScrollToPosition(scrollIndex);
         }
 */
     }
@@ -266,7 +281,7 @@ public class MainActivityFragment extends Fragment
     public void onPause()
     {
 //        scrollIndex = gridView.getFirstVisiblePosition();
-        state = gridView.onSaveInstanceState();
+//        gridState = gridView.onSaveInstanceState();
         Log.d("MainActivityFragment", "trying to save gridView state..");
         super.onPause();
     }
