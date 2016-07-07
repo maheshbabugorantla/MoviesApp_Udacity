@@ -24,5 +24,5 @@
 
 ### APIs Used
 <ol>
-  <li> Picasso </li>
+  <li><a href="http://square.github.io/picasso/">Picasso</a></li>
 </ol>
