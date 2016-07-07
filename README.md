@@ -10,7 +10,7 @@
 ## Below are the screenshots of the Current Status of Application
 
 ### MainScreen
-<img src="https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png" alt="Mountain View" style="width:100px;height:100px;">
+![mainfragment](https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png)
 
 ### MainScreen LandScape
 ![mainfragment_land](https://cloud.githubusercontent.com/assets/3885116/16655065/b14a0c78-4426-11e6-89f0-427cf61ac99d.png)
