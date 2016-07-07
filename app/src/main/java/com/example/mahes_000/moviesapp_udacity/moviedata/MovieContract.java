@@ -39,6 +39,8 @@ public class MovieContract {
         // Genre IDs
         public static final String COLUMN_GENRES = "genre_ids";
 
+        // Favorites Indicator
+        public static final String COLUMN_FAVORITES = "favorites";
     }
 
     public static final class MovieReviews implements BaseColumns {
@@ -85,6 +87,9 @@ public class MovieContract {
 
         // Genre IDs
         public static final String COLUMN_GENRES = "genre_ids";
+
+        // Favorites Indicator
+        public static final String COLUMN_FAVORITES = "favorites";
     }
 
     public static final class TVReviews implements BaseColumns {

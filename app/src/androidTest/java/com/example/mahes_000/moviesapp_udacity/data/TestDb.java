@@ -78,6 +78,7 @@ public class TestDb extends AndroidTestCase {
         movieEntryColumnHashSet.add(MovieContract.MovieEntry.COLUMN_RELEASE_DATE);
         movieEntryColumnHashSet.add(MovieContract.MovieEntry.COLUMN_RUNTIME);
         movieEntryColumnHashSet.add(MovieContract.MovieEntry.COLUMN_GENRES);
+        movieEntryColumnHashSet.add(MovieContract.MovieEntry.COLUMN_FAVORITES);
 
         int columnNameIndex = cursor.getColumnIndex("name");
 
