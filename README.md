@@ -5,8 +5,7 @@
 <p> To use this application. You will need your own API KEY.<br> This can be obtained from <a href="https://www.themoviedb.org/" target="_blank">MovieDB</a>. After clicking the link, create an account(if you don't have one) and follow the necessary steps provided on the website to obtain the API Key.<br></p>
 <p> Once you obtain the API Key, go to build.gradle file in the 'app' folder of this repository. And place your API Key in the section that looks as follows <br><br><em>buildTypes.each</em><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;it.buildConfigField&nbsp;'String',&nbsp;'THE_MOVIE_DB_API_KEY',&nbsp;"\"THE_MOVIE_DB_API\""<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br><br>In Place of "THE_MOVIE_DB_API" insert your API Key and run the App.</p>
 
-## Below are the screenshots of the Current Status of App
-
+## Below are the screenshots of the Current Status of Application
 
 ### MainScreen
 ![mainfragment](https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png)
@@ -25,4 +24,10 @@
 ### APIs Used
 <ol>
   <li><a href="http://square.github.io/picasso/">Picasso</a></li>
+</ol>
+
+### Future Goals
+<ol>
+  <li>Implement a SQLite Database to store the Web data locally. </li>
+  <li>Implement Content Providers and SyncAdapters to achieve efficient data transfers from Web to UI</li>
 </ol>
