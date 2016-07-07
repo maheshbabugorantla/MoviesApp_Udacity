@@ -1,4 +1,4 @@
-# MoviesApp_Udacity
+# Movie/TVShow Reviews App 
 
 <p>This an Android Application is made as a part of Udacity Android Development Project.<br> This app allows the user to see the <em><b>reviews and video trailers</b></em> for a <b><em>Movie or a TV Show</em></b> of his/her Choice.<br>User can go to settings window to change the choice of Video and also the rating type</p>
 
