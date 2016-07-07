@@ -31,3 +31,5 @@
   <li>Implement a SQLite Database to store the Web data locally. </li>
   <li>Implement Content Providers and SyncAdapters to achieve efficient data transfers from Web to UI</li>
 </ol>
+
+<p><br><br><b><em>&nbsp;&nbsp;&nbsp; ***** THIS APPLICATION IS STILL CURRENTLY UNDER DEVELOPMENT WILL BE UPDATED REGULARLY *****</b></em></p>
