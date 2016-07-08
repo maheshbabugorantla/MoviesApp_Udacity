@@ -10,6 +10,7 @@
 ## Below are the screenshots of the Current Status of Application
 
 ### MainScreen
+
 ![mainfragment](https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png)
 
 ### MainScreen LandScape
