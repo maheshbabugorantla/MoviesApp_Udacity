@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,15 +29,27 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailsActivityFragment extends Fragment {
+
     String Movies_Data = null;
     String[] final_values = null;
     String Video_Choice = null;
+
+
+    // Reviews List
+    ExpandableListView expandableListView;
+    ExpandableListAdapter expandableListAdapter;
+    List<String> listDataHeader;
+    HashMap<String, List<String>> listDataChild;
+
 
     public MovieDetailsActivityFragment() {
         setHasOptionsMenu(true);
@@ -158,7 +171,7 @@ public class MovieDetailsActivityFragment extends Fragment {
     }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
-    public class DownloadTask extends AsyncTask<String, Void, String> {
+    private class DownloadTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls) {
@@ -250,41 +263,47 @@ public class MovieDetailsActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(String string) {
             super.onPostExecute(string);
-/*
-
-            int index = 0;
-
-            // Creating the URL List for all the Poster Thumbnails in here
-            try
-            {
-
-                for (String s : final_values)
-                {
-                    if (s != null)
-                    {
-                        // Changing to the latest Story Overview
-                        movie_desc[index] = s;
-                        index += 1;
-                    }
-                }
-            }
-
-            catch (NullPointerException e)
-            {
-                e.printStackTrace();
-                Log.e("Accessing Null String", "Null String Array Detected");
-            }
-
-            catch(ArrayIndexOutOfBoundsException e)
-            {
-                e.printStackTrace();
-                Log.e("Invalid Indices Access" ,"more than 10 images detected");
-            }
-
-            return;
-*/
         }
     }
 
+    private void prepareListData()
+    {
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
+
+        // Adding child Data
+        listDataHeader.add("Top 250");
+        listDataHeader.add("Now Showing");
+        listDataHeader.add("Coming Soon..");
+
+        // Adding child data
+        List<String> top250 = new ArrayList<>();
+        top250.add("The Shawshank Redemption");
+        top250.add("The Godfather");
+        top250.add("The Godfather: Part II");
+        top250.add("Pulp Fiction");
+        top250.add("The Good, the Bad and the Ugly");
+        top250.add("The Dark Knight");
+        top250.add("12 Angry Men");
+
+        List<String> nowShowing = new ArrayList<>();
+        nowShowing.add("The Conjuring");
+        nowShowing.add("Despicable Me 2");
+        nowShowing.add("Turbo");
+        nowShowing.add("Grown Ups 2");
+        nowShowing.add("Red 2");
+        nowShowing.add("The Wolverine");
+
+        List<String> comingSoon = new ArrayList<>();
+        comingSoon.add("2 Guns");
+        comingSoon.add("The Smurfs 2");
+        comingSoon.add("The Spectacular Now");
+        comingSoon.add("The Canyons");
+        comingSoon.add("Europa Report");
+
+        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+        listDataChild.put(listDataHeader.get(1), nowShowing);
+        listDataChild.put(listDataHeader.get(2), comingSoon);
+    }
 
 }
