@@ -175,6 +175,10 @@ public class MainActivityFragment extends Fragment
             e.printStackTrace();
             Log.e("MoviesApp JSONException", " JSONException Occurred in getJSONData Function");
         }
+        catch(NullPointerException e)
+        {
+            e.printStackTrace();
+        }
 
         return(Data_movies);
     }

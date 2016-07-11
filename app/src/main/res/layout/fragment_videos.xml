@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:id="@+id/rlLayout_videos"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#CCFF00"
-    android:layout_weight="1">
+    android:layout_height="match_parent">
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/videos_list"
+        android:layout_margin="12dp"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="15sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:text="This is Fragment Videos"
-        android:id="@+id/fragmentA_textview"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center_horizontal"
-        android:textAlignment="center"
-        android:textColor="#ff0000"
-        android:textStyle="bold|italic"/>
+        android:id="@+id/videos_error"
+        android:visibility="invisible"
+        android:text="No Videos Available\n Please come back again"/>
 
-</LinearLayout>
+</RelativeLayout>

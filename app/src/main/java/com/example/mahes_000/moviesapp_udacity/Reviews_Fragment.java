@@ -63,6 +63,10 @@ public class Reviews_Fragment extends Fragment {
         Intent intent = getActivity().getIntent();
         boolean NetworkStatus = isNetworkAvailable();
 
+        // Setting the Adapter for the ListView
+        ArrayList<ReviewItem> reviews = new ArrayList<>();
+        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), reviews);
+
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && NetworkStatus)
         {
             String intent_text = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -75,9 +79,11 @@ public class Reviews_Fragment extends Fragment {
             // Fetching the Data for the Movie.
             boolean reviews_present = getMovieData(ID, Video_Choice);
 
+/*
             // Setting the Adapter for the ListView
             ArrayList<ReviewItem> reviews = new ArrayList<>();
             ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), reviews);
+*/
 
             if(reviews_present) {
                 reviews.clear();
@@ -96,17 +102,26 @@ public class Reviews_Fragment extends Fragment {
                 }
             }
 
-            ListView reviews_list = (ListView) Reviews_View.findViewById(R.id.reviews_list);
-            reviews_list.setAdapter(reviewsAdapter);
         }
 
-/*
+        // If there is no network connection
         else
         {
-            Reviews = "No Internet Available!\n\nConnect to the Internet and Re-Open the App";
-            ((TextView) Reviews_View.findViewById(R.id.reviews)).setText("Reviews:\n" + Reviews);
+            reviews.clear();
+
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("content", "No Reviews Available, Please Check your network connection");
+                jsonObject.put("author", "Anonymous");
+                reviews.add(new ReviewItem(jsonObject));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
-*/
+
+        ListView reviews_list = (ListView) Reviews_View.findViewById(R.id.reviews_list);
+        reviews_list.setAdapter(reviewsAdapter);
+
         return Reviews_View;
     }
 
