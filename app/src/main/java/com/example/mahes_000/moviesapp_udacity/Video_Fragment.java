@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,7 +84,7 @@ public class Video_Fragment extends Fragment {
                 videos_list.setVisibility(View.VISIBLE);
                 videos_list.setAdapter(videosAdapter);
             } else {
-                // When there are no Videos to display Hiding the videos List and pritnting the Error Message
+                // When there are no Videos to display Hiding the videos List and printing the Error Message (This also works fine when there is network connection drop)
                 (Video_View.findViewById(R.id.videos_list)).setVisibility(View.INVISIBLE);
                 TextView videos_error = (TextView) Video_View.findViewById(R.id.videos_error);
                 videos_error.setText("No Videos Available \n Please come back again");

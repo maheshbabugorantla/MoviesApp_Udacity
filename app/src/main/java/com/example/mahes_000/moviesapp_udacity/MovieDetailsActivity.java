@@ -1,25 +1,37 @@
 package com.example.mahes_000.moviesapp_udacity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
+    private Toolbar toolbar;
+    public CollapsingToolbarLayout collapsingToolbarLayout = null;
     ViewPager viewPager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie__details);
+
+        Context context = getApplicationContext();
 
         // View Pager is adapter to translate between different pages
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -32,6 +44,32 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // Setting up Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
+        Intent intent = getIntent();
+
+        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
+        {
+            String movie_details = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+            String[] str_values = movie_details.split("=");
+
+            String Image_Base_URL = "http://image.tmdb.org/t/p/w500/";
+            String Image_URL = Image_Base_URL + str_values[8];
+
+            // Setting the Image for the Poster
+            Picasso.with(getApplicationContext()).load(Image_URL).fit().into((ImageView) findViewById(R.id.profile_id));
+
+            collapsingToolbarLayout.setTitle(str_values[2]);
+        }
+
+        toolbarTextAppearance();
     }
 
     @Override
@@ -61,6 +99,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         Toast.makeText(this, "Movie added to the Favorites", Toast.LENGTH_LONG).show();
         return;
     }
+
+    private void toolbarTextAppearance() {
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.expandedappbar);
+    }
+
 }
 
 class MyAdapter extends FragmentPagerAdapter {

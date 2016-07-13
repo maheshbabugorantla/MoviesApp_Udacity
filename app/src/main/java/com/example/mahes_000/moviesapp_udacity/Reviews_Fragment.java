@@ -79,12 +79,6 @@ public class Reviews_Fragment extends Fragment {
             // Fetching the Data for the Movie.
             boolean reviews_present = getMovieData(ID, Video_Choice);
 
-/*
-            // Setting the Adapter for the ListView
-            ArrayList<ReviewItem> reviews = new ArrayList<>();
-            ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), reviews);
-*/
-
             if(reviews_present) {
                 reviews.clear();
                 reviews.addAll(getJSONData(Movies_Data));
@@ -101,7 +95,6 @@ public class Reviews_Fragment extends Fragment {
                     e.printStackTrace();
                 }
             }
-
         }
 
         // If there is no network connection

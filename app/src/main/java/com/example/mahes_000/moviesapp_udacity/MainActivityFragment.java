@@ -160,6 +160,9 @@ public class MainActivityFragment extends Fragment
                 stringBuilder.append("=");
 
                 stringBuilder.append(jsonObject.getString("id"));
+                stringBuilder.append("=");
+
+                stringBuilder.append(jsonObject.getString("backdrop_path"));
 
                 String image_url = "http://image.tmdb.org/t/p/w342/" + jsonObject.getString("poster_path");
                 imageItem.setImage(image_url);

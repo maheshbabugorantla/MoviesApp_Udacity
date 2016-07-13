@@ -17,7 +17,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/videos_error"
-        android:visibility="invisible"
-        android:text="No Videos Available\n Please come back again"/>
+        android:text="No Videos Available\n Please come back again"
+        android:gravity="center_vertical|center_horizontal"
+        android:includeFontPadding="false"
+        android:textStyle="italic|bold"
+        android:textColor="@color/accent"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

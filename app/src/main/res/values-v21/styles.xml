@@ -10,4 +10,26 @@
         <item name="colorAccent">@color/accent</item>
     </style>
 
+    <style name="DetailActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="expandedappbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">48sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="collapsedappbar" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
 </resources>

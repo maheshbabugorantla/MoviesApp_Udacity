@@ -23,6 +23,7 @@
 
         <activity
             android:name=".MovieDetailsActivity"
+            android:theme="@style/DetailActivityTheme"
             android:label="@string/title_activity_movie__details"
             android:parentActivityName=".MainActivity" >
             <meta-data
