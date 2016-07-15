@@ -122,7 +122,7 @@ public class MovieProvider extends ContentProvider {
                 }
                 cursor.close();
 
-                returnCursor = database.query(MovieContract.TVEntry.TABLE_NAME, projection, MovieContract.TVReviews.COLUMN_TV_ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
+                returnCursor = database.query(MovieContract.TVReviews.TABLE_NAME, projection, MovieContract.TVReviews.COLUMN_TV_ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
                 break;
 
             default:

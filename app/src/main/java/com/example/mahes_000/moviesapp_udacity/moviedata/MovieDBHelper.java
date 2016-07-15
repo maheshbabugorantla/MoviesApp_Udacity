@@ -16,7 +16,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     // If need to change the database schema, Increment the Number here
     // The Database Version typically starts at version '1', and must be manually incremented each time we release a new APK.
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "moviestv.db";
 
@@ -103,10 +103,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                       number of the database
          */
 
-        sqLiteDatabase.execSQL("DROP IF TABLE EXISTS " + MovieEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP IF TABLE EXISTS " + MovieReviews.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP IF TABLE EXISTS " + TVEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP IF TABLE EXISTS " + TVReviews.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + MovieReviews.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TVReviews.TABLE_NAME);
 
         // Recreating all the tables with the new schema.
         onCreate(sqLiteDatabase);

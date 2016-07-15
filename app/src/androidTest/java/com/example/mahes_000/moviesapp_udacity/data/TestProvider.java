@@ -203,8 +203,8 @@ public class TestProvider extends AndroidTestCase {
         );
 
         // Make sure we get the correct cursor out of the database
-        TestUtilities.validateCursor("testBasicWeatherQuery", MovieCursor, movieValues);
-        TestUtilities.validateCursor("testBasicWeatherQuery", MovieReviewCursor, reviewValues);
+        TestUtilities.validateCursor("test Basic MovieEntry Query", MovieCursor, movieValues);
+        TestUtilities.validateCursor("testBasic MovieReview Query", MovieReviewCursor, reviewValues);
     }
 
     public void testBasicTVQuery()
@@ -215,6 +215,8 @@ public class TestProvider extends AndroidTestCase {
 
         ContentValues TVValues = TestUtilities.createTVEntry();
         long TVRowId = TestUtilities.insertTVEntryValues(mContext);
+
+        assertTrue("Unable to Insert TV Review into TVReviews Table", TVRowId != -1);
 
         Cursor cursor = db.query(TVEntry.TABLE_NAME, null, TVEntry._ID + " = ?", new String[]{Long.toString(TVRowId)}, null, null, null);
 
@@ -232,6 +234,7 @@ public class TestProvider extends AndroidTestCase {
         cursor.close();
 
         ContentValues reviewValues = TestUtilities.createTVReviews(tv_id);
+        System.out.println("Test TV Review values: " + reviewValues);
         long ReviewRowId = db.insert(TVReviews.TABLE_NAME, null, reviewValues);
         System.out.println("TV Review Row ID (Test): " + ReviewRowId);
         assertTrue("Unable to Insert MovieReview into the Database", ReviewRowId != -1);
