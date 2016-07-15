@@ -70,16 +70,27 @@ public class MovieProvider extends ContentProvider {
             case MOVIE_ID:
                 long movie_id = ContentUris.parseId(uri);
                 Cursor cursor = database.query(MovieContract.MovieEntry.TABLE_NAME, projection, MovieContract.MovieEntry._ID + " = ?", new String[]{String.valueOf(movie_id)}, null, null, sortOrder);
-                movie_id = cursor.getInt(cursor.getColumnIndex("movie_id"));
+
+                if(cursor.moveToFirst()) {
+                    movie_id = cursor.getInt(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_MOVIE_ID));
+                }
+
                 cursor.close();
+
                 returnCursor = database.query(MovieContract.MovieEntry.TABLE_NAME, projection, MovieContract.MovieEntry.COLUMN_MOVIE_ID + " = ?", new String[]{String.valueOf(movie_id)}, null, null, sortOrder);
                 break;
 
             case MOVIE_REVIEW:
                 long movie_review_id = ContentUris.parseId(uri);
-                cursor = database.query(MovieContract.MovieEntry.TABLE_NAME, projection, MovieContract.MovieEntry._ID + " = ?", new String[]{String.valueOf(movie_review_id)}, null, null, sortOrder);
-                movie_review_id = cursor.getInt(cursor.getColumnIndex("movie_id"));
+                System.out.println("MovieReview Row ID (Main): " + movie_review_id);
+                cursor = database.query(MovieContract.MovieReviews.TABLE_NAME, projection, MovieContract.MovieReviews._ID + " = ?", new String[]{String.valueOf(movie_review_id)}, null, null, sortOrder);
+
+                if(cursor.moveToFirst()) {
+                    movie_review_id = cursor.getInt(cursor.getColumnIndex("movie_id"));
+                }
+
                 cursor.close();
+
                 returnCursor = database.query(MovieContract.MovieReviews.TABLE_NAME, projection, MovieContract.MovieReviews.COLUMN_MOVIE_ID + " = ?", new String[]{String.valueOf(movie_review_id)}, null, null, sortOrder);
                 break;
 
@@ -89,8 +100,12 @@ public class MovieProvider extends ContentProvider {
 
             case TV_ID:
                 long tv_id = ContentUris.parseId(uri);
-                cursor = database.query(MovieContract.MovieEntry.TABLE_NAME, projection, MovieContract.MovieEntry._ID + " = ?", new String[]{String.valueOf(tv_id)}, null, null, sortOrder);
-                tv_id = cursor.getInt(cursor.getColumnIndex("tv_id"));
+                cursor = database.query(MovieContract.TVEntry.TABLE_NAME, projection, MovieContract.TVEntry._ID + " = ?", new String[]{String.valueOf(tv_id)}, null, null, sortOrder);
+
+                if(cursor.moveToFirst()) {
+                    tv_id = cursor.getInt(cursor.getColumnIndex(MovieContract.TVEntry.COLUMN_TV_ID));
+                }
+
                 cursor.close();
 
                 returnCursor = database.query(MovieContract.TVEntry.TABLE_NAME, projection, MovieContract.TVEntry.COLUMN_TV_ID + " = ?", new String[]{String.valueOf(tv_id)}, null, null, sortOrder);
@@ -98,11 +113,16 @@ public class MovieProvider extends ContentProvider {
 
             case TV_REVIEW:
                 long tv_review_id = ContentUris.parseId(uri);
-                cursor = database.query(MovieContract.MovieEntry.TABLE_NAME, projection, MovieContract.MovieEntry._ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
-                tv_review_id = cursor.getInt(cursor.getColumnIndex("tv_id"));
+                System.out.println("TV Review ID (Main): " + tv_review_id);
+                cursor = database.query(MovieContract.TVReviews.TABLE_NAME, projection, MovieContract.TVReviews._ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
+
+                if(cursor.moveToFirst())
+                {
+                    tv_review_id = cursor.getInt(cursor.getColumnIndex(MovieContract.TVReviews.COLUMN_TV_ID));
+                }
                 cursor.close();
 
-                returnCursor = database.query(MovieContract.TVEntry.TABLE_NAME, projection, MovieContract.TVEntry.COLUMN_TV_ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
+                returnCursor = database.query(MovieContract.TVEntry.TABLE_NAME, projection, MovieContract.TVReviews.COLUMN_TV_ID + " = ?", new String[]{String.valueOf(tv_review_id)}, null, null, sortOrder);
                 break;
 
             default:
