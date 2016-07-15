@@ -31,10 +31,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_MOVIE_ENTRY = "CREATE TABLE " + MovieEntry.TABLE_NAME + " (" +
 
-                MovieEntry._ID + " INTEGER," +
+                MovieEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                 // This will be used as a Primary Key for Movie Reviews Table
-                MovieEntry.COLUMN_MOVIE_ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                MovieEntry.COLUMN_MOVIE_ID + " INTEGER UNIQUE, " +
                 MovieEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
@@ -58,10 +58,10 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
         final String SQL_CREATE_TV_ENTRY = "CREATE TABLE " + TVEntry.TABLE_NAME + " (" +
 
-                TVEntry._ID + " INTEGER, " +
+                TVEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
                 // This will be used as a Primary key for TV Reviews Table
-                TVEntry.COLUMN_TV_ID + " INTEGER NOT NULL PRIMARY KEY, " +
+                TVEntry.COLUMN_TV_ID + " INTEGER NOT NULL UNIQUE, " +
                 TVEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
                 TVEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
                 TVEntry.COLUMN_TITLE + " TEXT NOT NULL, " +

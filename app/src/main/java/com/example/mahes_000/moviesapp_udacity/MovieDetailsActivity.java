@@ -22,16 +22,16 @@ import com.squareup.picasso.Picasso;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
+/*
     private Toolbar toolbar;
     public CollapsingToolbarLayout collapsingToolbarLayout = null;
+*/
     ViewPager viewPager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie__details);
-
-        Context context = getApplicationContext();
 
         // View Pager is adapter to translate between different pages
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -45,13 +45,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-
+/*
         Intent intent = getIntent();
 
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
@@ -70,6 +64,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         toolbarTextAppearance();
+*/
     }
 
     @Override
@@ -100,10 +95,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return;
     }
 
+/*
     private void toolbarTextAppearance() {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.expandedappbar);
     }
+*/
 
 }
 

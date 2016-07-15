@@ -128,7 +128,7 @@ public class TestDb extends AndroidTestCase {
         }
 
         // Second step (Movie Review): Create Movie Review Values
-        ContentValues movieReviewValues = TestUtilities.createMovieReviews();
+        ContentValues movieReviewValues = TestUtilities.createMovieReviews(movie_id);
 
         long movieReviewId = sqLiteDatabase.insert(MovieContract.MovieReviews.TABLE_NAME, null, movieReviewValues);
 

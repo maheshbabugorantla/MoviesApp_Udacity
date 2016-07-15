@@ -41,6 +41,11 @@
                 android:value="com.example.mahes_000.moviesapp_udacity.MainActivity" />
         </activity>
 
+        <!-- Registering the Content Provider (MovieProvider.java class) -->
+        <provider
+            android:authorities="com.example.mahes_000.moviesapp_udacity"
+            android:name=".moviedata.MovieProvider"
+            />
     </application>
 
 </manifest>
