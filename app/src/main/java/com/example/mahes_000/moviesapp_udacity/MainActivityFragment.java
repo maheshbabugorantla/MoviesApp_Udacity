@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -22,26 +20,18 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
+
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
-// JSON Parsing Libraries
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements FetchMovieDataInterface{
     String[] final_values = null;
 
     private GridView gridView;
@@ -57,7 +47,9 @@ public class MainActivityFragment extends Fragment {
     private static final String LIST_STATE = "liststate";
 
     // These are all the Dummy Web links and movie descriptions.
+/*
     String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg", "http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
+*/
 
     ArrayList<String> movie_desc = new ArrayList<>();
 
@@ -67,106 +59,6 @@ public class MainActivityFragment extends Fragment {
 
     public MainActivityFragment() {
         setHasOptionsMenu(true);
-    }
-
-/*    private boolean getMovieData(String movie_choice, String video_choice, String page_no)
-    {
-
-        DownloadTask downloadTask = new DownloadTask();
-
-        try
-        {
-            downloadTask.execute(movie_choice,video_choice,page_no).get();
-            final_values = getJSONData(Movies_Data);
-        }
-
-        catch (InterruptedException e)
-        {
-            e.printStackTrace();
-        }
-        catch (ExecutionException e)
-        {
-            e.printStackTrace();
-        }
-
-        return true;
-    }*/
-
-    private String[] getJSONData(String json_data) {
-        // This will be returned when the parsing doesn't work as expected.
-        String[] Data_movies = null;
-
-        try {
-            // Parsing the JSON Data in the form of a String
-            JSONObject reader = new JSONObject(json_data);
-
-            JSONArray results_obj = reader.getJSONArray("results");
-
-            // Initializing the String Array to store the data for the Individual Movies
-            Data_movies = new String[results_obj.length()];
-
-            for (int index = 0; index < results_obj.length(); index++) {
-                ImageItem imageItem = new ImageItem();
-
-                JSONObject jsonObject = results_obj.getJSONObject(index);
-
-                StringBuilder stringBuilder = new StringBuilder();
-
-                stringBuilder.append(jsonObject.getString("poster_path"));
-                stringBuilder.append("=");
-
-                //stringBuilder.append(jsonObject.getString("adult")); // When you uncomment this please make sure that you change the indexes in MovieDetailsActivityFragment.java
-                //stringBuilder.append("=");
-
-                stringBuilder.append(jsonObject.getString("overview"));
-                stringBuilder.append("=");
-
-                if (Video_Choice.equals("movie")) {
-                    stringBuilder.append(jsonObject.getString("title"));
-                    stringBuilder.append("=");
-                } else if (Video_Choice.equals("tv")) {
-                    stringBuilder.append(jsonObject.getString("name"));
-                    stringBuilder.append("=");
-                }
-
-                stringBuilder.append(jsonObject.getString("vote_average"));
-                stringBuilder.append("=");
-                stringBuilder.append(jsonObject.getString("popularity"));
-                stringBuilder.append("=");
-
-                if (Video_Choice.equals("movie")) {
-                    stringBuilder.append(jsonObject.getString("release_date"));
-                    stringBuilder.append("=");
-                    imageItem.setTitle(jsonObject.getString("release_date").split("-")[0]);
-                } else if (Video_Choice.equals("tv")) {
-                    stringBuilder.append(jsonObject.getString("first_air_date"));
-                    stringBuilder.append("=");
-                    imageItem.setTitle(jsonObject.getString("first_air_date").split("-")[0]);
-                }
-
-                stringBuilder.append(Video_Choice); // Giving the Video Choice
-                stringBuilder.append("=");
-
-                stringBuilder.append(jsonObject.getString("id"));
-                stringBuilder.append("=");
-
-                stringBuilder.append(jsonObject.getString("backdrop_path"));
-
-                String image_url = "http://image.tmdb.org/t/p/w342/" + jsonObject.getString("poster_path");
-                imageItem.setImage(image_url);
-
-                mGridData.add(imageItem);
-
-                Data_movies[index] = stringBuilder.toString();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("MoviesApp JSONException", " JSONException Occurred in getJSONData Function");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-
-        return (Data_movies);
     }
 
     private boolean isNetworkAvailable() {
@@ -270,13 +162,11 @@ public class MainActivityFragment extends Fragment {
 
     public boolean LoadMoreData(String page) {
         if (isNetworkAvailable()) {
-            FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
+            FetchMovieData movieData = new FetchMovieData(getActivity(), MainActivityFragment.this);
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, page).get();
 
-                for (String s : final_values) {
-                    movie_desc.add(s);
-                }
+                Collections.addAll(movie_desc, final_values);
 
                 return true;
 
@@ -313,16 +203,11 @@ public class MainActivityFragment extends Fragment {
             mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
             movie_desc.clear(); // resetting all Movie Details
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
-            FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
+            FetchMovieData movieData = new FetchMovieData(getActivity(), MainActivityFragment.this);
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, "1").get();
 
-                for (String s : final_values) {
-                    if (s != null) {
-                        // Changing to the latest Story Overview
-                        movie_desc.add(s);
-                    }
-                }
+                Collections.addAll(movie_desc, final_values);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -346,13 +231,12 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-/*    private void UpdateData()
-    {
-        FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = preferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
-        Video_Choice = preferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
-    }*/
+    @Override
+    public void onDownloadComplete(ArrayList<ImageItem> gridData) {
+        mGridData.addAll(gridData);
+        gridViewAdapter.setGridData(mGridData);
+        gridViewAdapter.notifyDataSetChanged();
+    }
 
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
     /*public class DownloadTask extends AsyncTask<String, Void, String>

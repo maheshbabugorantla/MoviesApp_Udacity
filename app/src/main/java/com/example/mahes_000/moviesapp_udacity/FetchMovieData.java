@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 
 import org.json.JSONArray;
@@ -38,15 +39,16 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
     String Movies_Choice = "top_rated";
 
     private ArrayList<ImageItem> mMoviesGrid = new ArrayList<>();
-    private GridViewAdapter MoviesAdapter;
     private final Context mContext;
+
+    private FetchMovieDataInterface movieDataInterface;
 
     private static final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
-    public FetchMovieData(Context context, GridViewAdapter moviesAdapter) {
+    public FetchMovieData(Context context, FetchMovieDataInterface activityContext) {
 
-        MoviesAdapter = moviesAdapter;
         mContext = context;
+        this.movieDataInterface = activityContext;
 
         // Getting the User Preferences.
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -331,6 +333,6 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
     @Override
     protected void onPostExecute(String[] s)
     {
-        MoviesAdapter.setGridData(mMoviesGrid);
+        movieDataInterface.onDownloadComplete(mMoviesGrid);
     }
 }
