@@ -43,14 +43,6 @@ public class MovieDetailsActivityFragment extends Fragment {
     String[] final_values = null;
     String Video_Choice = null;
 
-
-    // Reviews List
-    ExpandableListView expandableListView;
-    ExpandableListAdapter expandableListAdapter;
-    List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
-
-
     public MovieDetailsActivityFragment() {
         setHasOptionsMenu(true);
     }
@@ -165,6 +157,9 @@ public class MovieDetailsActivityFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
             Log.e("MoviesApp JSONException", " JSONException Occurred in getJSONData Function");
+        }
+        catch(NullPointerException e){
+            e.printStackTrace();
         }
 
         return (stringBuilder.toString().split("="));

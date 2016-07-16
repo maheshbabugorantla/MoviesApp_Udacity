@@ -4,27 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import org.json.JSONArray;
+import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchReviewData;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -36,7 +27,6 @@ import java.util.concurrent.ExecutionException;
  */
 public class Reviews_Fragment extends Fragment {
 
-    String Movies_Data = null;
     String Video_Choice = null;
 
     private static final String LOG_TAG = Reviews_Fragment.class.getSimpleName();
@@ -76,32 +66,23 @@ public class Reviews_Fragment extends Fragment {
             String ID = intent_values[7];
             Video_Choice = intent_values[6];
 
-            // Fetching the Data for the Movie.
-            boolean reviews_present = getMovieData(ID, Video_Choice);
-
-            if(reviews_present) {
-                reviews.clear();
-                reviews.addAll(getJSONData(Movies_Data));
+            reviews.clear();
+            // Fetching the Data reviews for the Movie/TV Show.
+            try
+            {
+                reviews.addAll(getMovieData(ID, Video_Choice));
             }
-            else {
-                reviews.clear();
-
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("content", "No Reviews Available yet for this TV Show, Please check back again");
-                    jsonObject.put("author", "Anonymous");
-                    reviews.add(new ReviewItem(jsonObject));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            catch(NullPointerException e)
+            {
+                e.printStackTrace();
             }
+
         }
 
         // If there is no network connection
         else
         {
             reviews.clear();
-
             try {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("content", "No Reviews Available, Please Check your network connection");
@@ -118,158 +99,33 @@ public class Reviews_Fragment extends Fragment {
         return Reviews_View;
     }
 
-    private boolean getMovieData(String movie_choice, String video_choice) {
+    private ArrayList<ReviewItem> getMovieData(String movie_choice, String video_choice) {
 
         if (video_choice.equals("movie")) {
 
-            DownloadTask downloadTask = new DownloadTask();
+            FetchReviewData reviewData = new FetchReviewData(getActivity());
 
             try {
-                downloadTask.execute(movie_choice, video_choice).get();
+                return (reviewData.execute(movie_choice, video_choice).get());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private ArrayList<ReviewItem> getJSONData(String json_data) {
-
-        ArrayList<ReviewItem> reviewItems = new ArrayList<>();
-
-        try {
-            // Parsing the JSON Data in the form of a String
-            JSONObject reader = new JSONObject(json_data);
-
-            int total_review_count = Integer.parseInt(reader.getString("total_results"));
-
-            Log.d(LOG_TAG, "Inside JSON Function, " + Integer.toString(total_review_count));
-
-            if(total_review_count > 0)
-            {
-                JSONArray reviews = reader.getJSONArray("results");
-
-                int review_count = reviews.length();
-
-                for (int index = 0; index < review_count; index++)
-                {
-                    reviewItems.add(new ReviewItem(reviews.getJSONObject(index)));
-                }
-            }
-            else
-            {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("content","No Reviews Available yet for this Movie");
-                jsonObject.put("author", "Anonymous");
-                reviewItems.add(new ReviewItem(jsonObject));
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("MoviesApp JSONException", " JSONException Occurred in Review Fragment getJSONData Function");
-        }
-
-        return reviewItems;
-    }
-
-
-    private class DownloadTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... urls) {
-            return (getData(urls[0], urls[1]));
-        }
-
-        public String getData(String url, String Video_Type) {
-            HttpURLConnection httpURLConnection = null;
-            BufferedReader bufferedReader = null;
-
-            final String MOVIES_BASE_URL = "https://api.themoviedb.org/3";
-            final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
-            final String ID = "api_key";
-
-            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(url).appendPath("reviews").appendQueryParameter(ID, API_Key).build();
-
-            String BuiltURL = BuiltUri.toString();
-
-            Log.d("Movie URL", BuiltURL);
-
+        } else {
             try {
-                URL web_url = new URL(BuiltURL);
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("content", "No Reviews Available yet for this TV Show, Please check back again");
+                jsonObject.put("author", "Anonymous");
 
-                // Creates a request to TheMovieDB Website and opens the Connection
-                httpURLConnection = (HttpURLConnection) web_url.openConnection();
-                httpURLConnection.setRequestMethod("GET"); // Letting the Connection know that the data will be fetched
-                httpURLConnection.connect(); // Connecting to the Web Link
-
-                // Read the Input Stream into the String
-                InputStream inputStream = httpURLConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-
-                // This happens when there is no data being read from the Opened Connection to Web URL.
-                if (inputStream == null) {
-                    return null;
-                }
-
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-
-                // Now reading the raw JSON Data into BufferReader
-                while ((line = bufferedReader.readLine()) != null) {
-                    buffer.append(line);
-                }
-
-                // This might happen when read from URL becomes unsuccessful or may be the connection might drop in between
-                if (buffer.length() == 0) {
-                    return null;
-                }
-
-                Movies_Data = buffer.toString();
-            }
-
-            // This Exception will occur whenever there is MALFORMED URL
-            catch (MalformedURLException e) {
+                ArrayList<ReviewItem> TvReviews = new ArrayList<>();
+                TvReviews.add(new ReviewItem(jsonObject));
+                return (TvReviews);
+            } catch (JSONException e) {
                 e.printStackTrace();
-                Log.e("MoviesApp MalformedURL:", " Malformed URL Exception Occurred");
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.e("MoviesApp IOException: ", "IO Exception Occurred");
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("MoviesApp Exception: ", " Unknown Exception Occurred");
             }
-
-            // Here Closing all the Open Network Connections and the BufferedReaders.
-            finally {
-                // Checking to see if the connection to web URL is still Open. If yes, then close it.
-                if (httpURLConnection != null) {
-                    httpURLConnection.disconnect();
-                }
-
-                if (bufferedReader != null) {
-                    try {
-                        bufferedReader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        Log.e("MoviesApp IOException: ", " IO Exception occurred while closing the reader");
-                    }
-                }
-            }
-
-            return (Movies_Data);
         }
 
-        @Override
-        protected void onPostExecute(String string) {
-            super.onPostExecute(string);
-        }
+        return null;
     }
-
-
 }

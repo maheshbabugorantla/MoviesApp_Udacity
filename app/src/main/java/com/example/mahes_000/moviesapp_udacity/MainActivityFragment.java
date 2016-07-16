@@ -46,11 +46,6 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
     private Parcelable gridState = null;
     private static final String LIST_STATE = "liststate";
 
-    // These are all the Dummy Web links and movie descriptions.
-/*
-    String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg", "http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
-*/
-
     ArrayList<String> movie_desc = new ArrayList<>();
 
     // This is used to select between the "popular" and "top_rated"
@@ -225,9 +220,6 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
             mGridData.clear();
             movie_desc.clear();
             Toast.makeText(getActivity(), "Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
-/*
-            gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
-*/
         }
     }
 
@@ -238,145 +230,9 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
         gridViewAdapter.notifyDataSetChanged();
     }
 
-    // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
-    /*public class DownloadTask extends AsyncTask<String, Void, String>
-    {
-
-        @Override
-        protected String doInBackground(String... urls)
-        {
-            return(getData(urls[0], urls[1], urls[2]));
-        }
-
-        public String getData(String Movie_Choice, String Video_Type, String page_no)
-        {
-            HttpURLConnection httpURLConnection = null;
-            BufferedReader bufferedReader = null;
-
-            final String MOVIES_BASE_URL = "https://api.themoviedb.org/3";
-            final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
-            final String ID = "api_key";
-            final String Page = "page";
-
-            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(Movie_Choice).appendQueryParameter(ID, API_Key).appendQueryParameter(Page, page_no).build();
-
-            String BuiltURL = BuiltUri.toString();
-
-            Log.d("Movie URL", BuiltURL);
-
-            try
-            {
-                URL web_url = new URL(BuiltURL);
-
-                // Creates a request to TheMovieDB Website and opens the Connection
-                httpURLConnection = (HttpURLConnection) web_url.openConnection();
-                httpURLConnection.setRequestMethod("GET"); // Letting the Connection know that the data will be fetched
-                httpURLConnection.connect(); // Connecting to the Web Link
-
-                // Read the Input Stream into the String
-                InputStream inputStream = httpURLConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-
-                // This happens when there is no data being read from the Opened Connection to Web URL.
-                if(inputStream == null)
-                {
-                    return null;
-                }
-
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-                String line;
-
-                // Now reading the raw JSON Data into BufferReader
-                while((line=bufferedReader.readLine())!= null)
-                {
-                    buffer.append(line);
-                }
-
-                // This might happen when read from URL becomes unsuccessful or may be the connection might drop in between
-                if(buffer.length() == 0)
-                {
-                    return null;
-                }
-
-                Movies_Data = buffer.toString();
-            }
-
-            // This Exception will occur whenever there is MALFORMED URL
-            catch (MalformedURLException e)
-            {
-                e.printStackTrace();
-                Log.e("MoviesApp MalformedURL:", " Malformed URL Exception Occurred");
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-                Log.e("MoviesApp IOException: ", "IO Exception Occurred");
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                Log.e("MoviesApp Exception: "," Unknown Exception Occurred");
-            }
-
-            // Here Closing all the Open Network Connections and the BufferedReaders.
-            finally
-            {
-                // Checking to see if the connection to web URL is still Open. If yes, then close it.
-                if(httpURLConnection != null)
-                {
-                    httpURLConnection.disconnect();
-                }
-
-                if(bufferedReader != null)
-                {
-                    try
-                    {
-                        bufferedReader.close();
-                    }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                        Log.e("MoviesApp IOException: ", " IO Exception occurred while closing the reader");
-                    }
-                }
-            }
-
-            return(Movies_Data);
-        }
-
-        @Override
-        protected void onPostExecute(String string)
-        {
-            super.onPostExecute(string);
-
-            // Creating the URL List for all the Poster Thumbnails in here
-            try
-            {
-                gridViewAdapter.setGridData(mGridData);
-
-                for (String s : final_values)
-                {
-                    if (s != null)
-                    {
-                        // Changing to the latest Story Overview
-                        movie_desc.add(s);
-                    }
-                }
-            }
-            catch (NullPointerException e)
-            {
-                e.printStackTrace();
-                Log.e("Accessing Null String", "Null String Array Detected");
-            }
-
-            catch(ArrayIndexOutOfBoundsException e)
-            {
-                e.printStackTrace();
-                Log.e("Invalid Indices Access" ,"more than 10 images detected");
-            }
-
-        }
-    }*/
+    @Override
+    public void onDownloadReviews() {
+        return;
+    }
 
 }

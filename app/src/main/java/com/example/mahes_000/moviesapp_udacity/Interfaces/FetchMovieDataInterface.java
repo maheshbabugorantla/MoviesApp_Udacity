@@ -10,4 +10,6 @@ import java.util.ArrayList;
 public interface FetchMovieDataInterface {
 
         void onDownloadComplete(ArrayList<ImageItem> gridData);
+
+        void onDownloadReviews();
 }
