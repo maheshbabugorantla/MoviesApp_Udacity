@@ -43,8 +43,8 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
 
     private static final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
-    public FetchMovieData(Context context, GridViewAdapter moviesAdapter)
-    {
+    public FetchMovieData(Context context, GridViewAdapter moviesAdapter) {
+
         MoviesAdapter = moviesAdapter;
         mContext = context;
 

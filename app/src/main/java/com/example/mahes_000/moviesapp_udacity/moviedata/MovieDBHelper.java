@@ -16,7 +16,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     // If need to change the database schema, Increment the Number here
     // The Database Version typically starts at version '1', and must be manually incremented each time we release a new APK.
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String DATABASE_NAME = "moviestv.db";
 
@@ -43,7 +43,9 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 MovieEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 MovieEntry.COLUMN_RUNTIME + " TEXT NOT NULL, " +
 //                MovieEntry.COLUMN_GENRES + " TEXT NOT NULL, " +
-                MovieEntry.COLUMN_FAVORITES + " INTEGER NOT NULL);";
+                MovieEntry.COLUMN_FAVORITES + " INTEGER NOT NULL, " +
+
+                " UNIQUE (" + MovieEntry.COLUMN_MOVIE_ID + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_MOVIE_REVIEWS = "CREATE TABLE " + MovieReviews.TABLE_NAME + " (" +
 
@@ -70,7 +72,8 @@ public class MovieDBHelper extends SQLiteOpenHelper {
                 TVEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
                 TVEntry.COLUMN_RUNTIME + " TEXT NOT NULL, " +
 //                TVEntry.COLUMN_GENRES + " TEXT NOT NULL, " +
-                TVEntry.COLUMN_FAVORITES + " INTEGER NOT NULL);";
+                TVEntry.COLUMN_FAVORITES + " INTEGER NOT NULL, " +
+                " UNIQUE (" + TVEntry.COLUMN_TV_ID + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_TV_REVIEW = "CREATE TABLE " + TVReviews.TABLE_NAME + " (" +
 
