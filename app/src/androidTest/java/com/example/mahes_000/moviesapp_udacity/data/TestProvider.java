@@ -445,7 +445,7 @@ public class TestProvider extends AndroidTestCase {
             contentValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, randInt(5, 10));
             contentValues.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "N/A");
             contentValues.put(MovieContract.MovieEntry.COLUMN_RUNTIME, "120");
-            contentValues.put(MovieContract.MovieEntry.COLUMN_GENRES, "1234,1235,1236");
+//            contentValues.put(MovieContract.MovieEntry.COLUMN_GENRES, "1234,1235,1236");
             contentValues.put(MovieContract.MovieEntry.COLUMN_FAVORITES, 1);
 
             movie_ID += 1;

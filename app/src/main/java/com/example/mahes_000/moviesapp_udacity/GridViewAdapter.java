@@ -15,7 +15,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 /**
- * Created by mahes_000 on 6/30/2016.
+ * Created by Mahesh Babu Gorantla on 6/30/2016.
+ *
+ * This is used to display Poster Image ThumbNails for each Movie
  */
 public class GridViewAdapter extends ArrayAdapter<ImageItem>
 {

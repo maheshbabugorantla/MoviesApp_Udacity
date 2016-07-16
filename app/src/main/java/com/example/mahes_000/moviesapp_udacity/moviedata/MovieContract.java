@@ -71,8 +71,10 @@ public class MovieContract {
         // Run Time
         public static final String COLUMN_RUNTIME = "runtime";
 
+/*
         // Genre IDs
         public static final String COLUMN_GENRES = "genre_ids";
+*/
 
         // Favorites Indicator
         public static final String COLUMN_FAVORITES = "favorites";
@@ -150,8 +152,10 @@ public class MovieContract {
         // Run Time
         public static final String COLUMN_RUNTIME = "episode_run_time";
 
+/*
         // Genre IDs
         public static final String COLUMN_GENRES = "genre_ids";
+*/
 
         // Favorites Indicator
         public static final String COLUMN_FAVORITES = "favorites";

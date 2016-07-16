@@ -6,6 +6,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
@@ -179,7 +180,7 @@ public class MovieProvider extends ContentProvider {
                 if (_id > 0) {
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
                 } else {
-                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                    throw new SQLException("Unable to insert rows into: " + uri);
                 }
 
                 break;
@@ -190,7 +191,7 @@ public class MovieProvider extends ContentProvider {
                 if (_id > 0) {
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
                 } else {
-                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                    throw new SQLException("Unable to insert rows into: " + uri);
                 }
 
                 break;
@@ -201,7 +202,7 @@ public class MovieProvider extends ContentProvider {
                 if (_id > 0) {
                     returnUri = MovieContract.MovieEntry.buildMovieUri(_id);
                 } else {
-                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                    throw new SQLException("Unable to insert rows into: " + uri);
                 }
 
                 break;
@@ -212,7 +213,7 @@ public class MovieProvider extends ContentProvider {
                 if (_id > 0) {
                     returnUri = MovieContract.TVReviews.buildTVReviewsUri(_id);
                 } else {
-                    throw new UnsupportedOperationException("Unable to insert rows into: " + uri);
+                    throw new SQLException("Unable to insert rows into: " + uri);
                 }
 
                 break;
@@ -297,6 +298,13 @@ public class MovieProvider extends ContentProvider {
         return rows;
     }
 
+    /* Putting a bunch of interests into a single transaction is much faster than inserting each row individually.
+     *
+     * BulkInsert function will allow us to do that work in a single Transaction
+     *
+     *  NOTE: If we do not set the transaction to be successful the records will not be committed when we call
+     *        endTransaction.
+     */
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
 

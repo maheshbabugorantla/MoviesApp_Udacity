@@ -41,8 +41,7 @@ import org.json.JSONObject;
  * A placeholder fragment containing a simple view.
  */
 
-public class MainActivityFragment extends Fragment
-{
+public class MainActivityFragment extends Fragment {
     String[] final_values = null;
 
     private GridView gridView;
@@ -58,7 +57,7 @@ public class MainActivityFragment extends Fragment
     private static final String LIST_STATE = "liststate";
 
     // These are all the Dummy Web links and movie descriptions.
-    String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg","http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg","http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png","http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg","https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg","https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg","https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg","http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg","https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg","https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg","https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
+    String[] urls = {"http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg", "http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg", "http://orig00.deviantart.net/12fd/f/2015/243/0/c/albumcoverfor_benprunty_fragments_sylviaritter_by_faith303-d97uftr.png", "http://image.tmdb.org/t/p/w185//vDwphkloD7ToaDpKASAXGgHOclN.jpg", "https://image.tmdb.org/t/p/w185//HcVs1vI9XRXIzj0SIbZAbhJnyo.jpg", "https://image.tmdb.org/t/p/w185//m5O3SZvQ6EgD5XXXLPIP1wLppeW.jpg", "https://image.tmdb.org/t/p/w185/2cNZTfT3jCcI4Slin3jpHKmA2Ge.jpg", "http://image.tmdb.org/t/p/w185/2EhWnRunP8dt6F0KyeIQPDykZcV.jpg", "https://image.tmdb.org/t/p/w185/tCOciAMFKth9iyoMkaibz4uroxi.jpg", "https://s-media-cache-ak0.pinimg.com/236x/3b/49/b5/3b49b5881843e77fa0b2e6d1e3035687.jpg", "https://s-media-cache-ak0.pinimg.com/236x/d7/64/12/d764122bd97790f871f3e6878aa1bbc8.jpg"};
 
     ArrayList<String> movie_desc = new ArrayList<>();
 
@@ -66,12 +65,11 @@ public class MainActivityFragment extends Fragment
     String Movies_Choice = "top_rated";
     String Video_Choice = "movies";
 
-    public MainActivityFragment()
-    {
+    public MainActivityFragment() {
         setHasOptionsMenu(true);
     }
 
-    private boolean getMovieData(String movie_choice, String video_choice, String page_no)
+/*    private boolean getMovieData(String movie_choice, String video_choice, String page_no)
     {
 
         DownloadTask downloadTask = new DownloadTask();
@@ -92,15 +90,13 @@ public class MainActivityFragment extends Fragment
         }
 
         return true;
-    }
+    }*/
 
-    private String[] getJSONData(String json_data)
-    {
+    private String[] getJSONData(String json_data) {
         // This will be returned when the parsing doesn't work as expected.
         String[] Data_movies = null;
 
-        try
-        {
+        try {
             // Parsing the JSON Data in the form of a String
             JSONObject reader = new JSONObject(json_data);
 
@@ -109,8 +105,7 @@ public class MainActivityFragment extends Fragment
             // Initializing the String Array to store the data for the Individual Movies
             Data_movies = new String[results_obj.length()];
 
-            for(int index = 0; index < results_obj.length(); index++)
-            {
+            for (int index = 0; index < results_obj.length(); index++) {
                 ImageItem imageItem = new ImageItem();
 
                 JSONObject jsonObject = results_obj.getJSONObject(index);
@@ -126,13 +121,10 @@ public class MainActivityFragment extends Fragment
                 stringBuilder.append(jsonObject.getString("overview"));
                 stringBuilder.append("=");
 
-                if(Video_Choice.equals("movie"))
-                {
+                if (Video_Choice.equals("movie")) {
                     stringBuilder.append(jsonObject.getString("title"));
                     stringBuilder.append("=");
-                }
-                else if(Video_Choice.equals("tv"))
-                {
+                } else if (Video_Choice.equals("tv")) {
                     stringBuilder.append(jsonObject.getString("name"));
                     stringBuilder.append("=");
                 }
@@ -142,15 +134,11 @@ public class MainActivityFragment extends Fragment
                 stringBuilder.append(jsonObject.getString("popularity"));
                 stringBuilder.append("=");
 
-                if(Video_Choice.equals("movie"))
-                {
+                if (Video_Choice.equals("movie")) {
                     stringBuilder.append(jsonObject.getString("release_date"));
                     stringBuilder.append("=");
                     imageItem.setTitle(jsonObject.getString("release_date").split("-")[0]);
-                }
-
-                else if(Video_Choice.equals("tv"))
-                {
+                } else if (Video_Choice.equals("tv")) {
                     stringBuilder.append(jsonObject.getString("first_air_date"));
                     stringBuilder.append("=");
                     imageItem.setTitle(jsonObject.getString("first_air_date").split("-")[0]);
@@ -171,40 +159,34 @@ public class MainActivityFragment extends Fragment
 
                 Data_movies[index] = stringBuilder.toString();
             }
-        }
-
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             Log.e("MoviesApp JSONException", " JSONException Occurred in getJSONData Function");
-        }
-        catch(NullPointerException e)
-        {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
 
-        return(Data_movies);
+        return (Data_movies);
     }
 
-    private boolean isNetworkAvailable()
-    {
+    private boolean isNetworkAvailable() {
         /*
             Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
             Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
             Calling getActivity() will return the Context of the App.
         */
 
-        ConnectivityManager connectivityManager =  (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
-        return(activeNetworkInfo != null && activeNetworkInfo.isConnected());
+        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView =  inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
@@ -214,11 +196,9 @@ public class MainActivityFragment extends Fragment
 
         gridView.setAdapter(gridViewAdapter);
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
 
                 startActivity(toDetailActivity);
@@ -242,23 +222,20 @@ public class MainActivityFragment extends Fragment
 
         progressBar.setVisibility(View.VISIBLE);
 
-        return(rootView);
+        return (rootView);
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
-    {
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null)
-        {
+        if (savedInstanceState != null) {
             gridState = savedInstanceState.getParcelable(LIST_STATE);
             Log.d("In onActivityCreated", "Retrieving the Saved Instance State");
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle state)
-    {
+    public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         Log.d("In OnSaveInstanceState", "Saving the state of the app");
         gridState = gridView.onSaveInstanceState();
@@ -267,10 +244,8 @@ public class MainActivityFragment extends Fragment
 
     // This function is called when the fragment is available for the user to Start Interacting
     @Override
-    public void onResume()
-    {
-        if(gridState != null)
-        {
+    public void onResume() {
+        if (gridState != null) {
             gridView.onRestoreInstanceState(gridState);
             Log.d("MainActivityFragment", "trying to restore gridView state..");
         }
@@ -285,8 +260,7 @@ public class MainActivityFragment extends Fragment
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {
 //        scrollIndex = gridView.getFirstVisiblePosition();
 //        gridState = gridView.onSaveInstanceState();
         Log.d("MainActivityFragment", "trying to save gridView state..");
@@ -294,50 +268,94 @@ public class MainActivityFragment extends Fragment
     }
 
 
+    public boolean LoadMoreData(String page) {
+        if (isNetworkAvailable()) {
+            FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
+            try {
+                final_values = movieData.execute(Movies_Choice, Video_Choice, page).get();
 
-    public boolean LoadMoreData(String page)
-    {
-        return(getMovieData(Movies_Choice, Video_Choice, page));
+                for (String s : final_values) {
+                    movie_desc.add(s);
+                }
+
+                return true;
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            mGridData.clear();
+            movie_desc.clear();
+            Toast.makeText(getActivity(), "Unable to get more movies, No Internet available.\nConnect to the internet and Re-open the App", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return false;
     }
 
     // This pull all the data from theMovieDB using the default settings as soon as the app starts
     @Override
-    public void onStart()
-    {
+    public void onStart() {
         super.onStart();
 
         Log.d("Inside OnStart Function", "onStart Started");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
-        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
+        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
+        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
 
         System.out.println("Movies Choice " + Movies_Choice);
         System.out.println("Movies Choice " + Video_Choice);
 
-        //Log.i("MovieApp Movies Choice:", Movies_Choice);
-
-        if(isNetworkAvailable())
-        {
+        if (isNetworkAvailable()) {
             mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
             movie_desc.clear(); // resetting all Movie Details
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
-            getMovieData(Movies_Choice, Video_Choice, "1");
+            FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
+            try {
+                final_values = movieData.execute(Movies_Choice, Video_Choice, "1").get();
+
+                for (String s : final_values) {
+                    if (s != null) {
+                        // Changing to the latest Story Overview
+                        movie_desc.add(s);
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+
+            //getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             mGridData.clear();
             movie_desc.clear();
-            Toast.makeText(getActivity(),"Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
 /*
             gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
 */
         }
     }
 
+/*    private void UpdateData()
+    {
+        FetchMovieData movieData = new FetchMovieData(getActivity(), gridViewAdapter);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Movies_Choice = preferences.getString(getString(R.string.pref_rating_choice_key),getString(R.string.pref_rating_choice_default));
+        Video_Choice = preferences.getString(getString(R.string.pref_video_choice_key),getString(R.string.pref_video_choice_default));
+    }*/
+
     // This class is used to download the Data using the theMovieDB API using the BackGround Thread.
-    public class DownloadTask extends AsyncTask<String, Void, String>
+    /*public class DownloadTask extends AsyncTask<String, Void, String>
     {
 
         @Override
@@ -346,7 +364,7 @@ public class MainActivityFragment extends Fragment
             return(getData(urls[0], urls[1], urls[2]));
         }
 
-        public String getData(String url, String Video_Type, String page_no)
+        public String getData(String Movie_Choice, String Video_Type, String page_no)
         {
             HttpURLConnection httpURLConnection = null;
             BufferedReader bufferedReader = null;
@@ -356,7 +374,7 @@ public class MainActivityFragment extends Fragment
             final String ID = "api_key";
             final String Page = "page";
 
-            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(url).appendQueryParameter(ID, API_Key).appendQueryParameter(Page,page_no).build();
+            Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(Movie_Choice).appendQueryParameter(ID, API_Key).appendQueryParameter(Page, page_no).build();
 
             String BuiltURL = BuiltUri.toString();
 
@@ -398,8 +416,6 @@ public class MainActivityFragment extends Fragment
                 }
 
                 Movies_Data = buffer.toString();
-
-                //Log.i("TheMovieDB JSON Data:", Movies_Data);
             }
 
             // This Exception will occur whenever there is MALFORMED URL
@@ -477,6 +493,6 @@ public class MainActivityFragment extends Fragment
             }
 
         }
-    }
+    }*/
 
 }
