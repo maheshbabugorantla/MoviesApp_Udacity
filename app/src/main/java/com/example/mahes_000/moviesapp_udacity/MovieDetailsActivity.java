@@ -20,6 +20,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MovieDetailsActivity extends AppCompatActivity {
 
 /*
@@ -31,8 +34,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_movie__details);
+        setContentView(R.layout.collapsible_layout);
 
+/*
         // View Pager is adapter to translate between different pages
         viewPager = (ViewPager) findViewById(R.id.viewPager);
 
@@ -44,8 +48,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         // Setting up Tabs
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-/*
+*/
         Intent intent = getIntent();
 
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
@@ -58,13 +61,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
             String Image_URL = Image_Base_URL + str_values[8];
 
             // Setting the Image for the Poster
-            Picasso.with(getApplicationContext()).load(Image_URL).fit().into((ImageView) findViewById(R.id.profile_id));
+            Picasso.with(getApplicationContext()).load(Image_URL).fit().into((ImageView) findViewById(R.id.movie_poster));
 
-            collapsingToolbarLayout.setTitle(str_values[2]);
+            setupToolbar();
+            setupViewPager();
+            setupCollapsingToolbar(str_values[2]);
         }
-
-        toolbarTextAppearance();
-*/
     }
 
     @Override
@@ -95,12 +97,45 @@ public class MovieDetailsActivity extends AppCompatActivity {
         return;
     }
 
-/*
-    private void toolbarTextAppearance() {
+    private void setupCollapsingToolbar(String title) {
+        final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(
+                R.id.collapse_toolbar);
+
+        collapsingToolbar.setTitleEnabled(true);
+        collapsingToolbar.setTitle(title);
+        collapsingToolbar.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
+    }
+
+/*    private void toolbarTextAppearance() {
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.expandedappbar);
-    }
+    }*/
+    private void setupToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+/*
+        getSupportActionBar().setTitle(Title);
 */
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setupViewPager() {
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setupViewPager(viewPager);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        tabLayout.setupWithViewPager(viewPager);
+}
+
+    private void setupViewPager(ViewPager viewPager)
+    {
+        MyAdapter adapter = new MyAdapter(getSupportFragmentManager());
+        adapter.addFrag(new MovieDetailsActivityFragment(), "DETAILS");
+        adapter.addFrag(new Reviews_Fragment(), "REVIEWS");
+        adapter.addFrag(new Video_Fragment(), "TRAILERS");
+
+        viewPager.setAdapter(adapter);
+    }
 
 }
 
@@ -111,9 +146,21 @@ class MyAdapter extends FragmentPagerAdapter {
         super(fragmentManager);
     }
 
+    private final List<Fragment> mFragmentList = new ArrayList<>();
+    private final List<String> mFragmentTitleList = new ArrayList<>();
+
     @Override
     public Fragment getItem(int position) {
 
+        return mFragmentList.get(position);
+    }
+
+    public void addFrag(Fragment fragment, String title) {
+        mFragmentList.add(fragment);
+        mFragmentTitleList.add(title);
+    }
+
+/*
         Fragment fragment = null;
 
         if(position == 0)
@@ -131,16 +178,21 @@ class MyAdapter extends FragmentPagerAdapter {
 
         return fragment;
     }
+*/
 
     // WhenEver a ViewPager wants to display a page it will call getCount() Method that tells exactly how many pages are there.
     @Override
     public int getCount() {
-        return 3;
+        return mFragmentList.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
 
+        return mFragmentTitleList.get(position);
+    }
+
+/*
         if(position == 0)
         {
             return "DETAILS";
@@ -157,5 +209,5 @@ class MyAdapter extends FragmentPagerAdapter {
         }
 
         return null;
-    }
+    }*/
 }

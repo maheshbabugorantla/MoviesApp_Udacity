@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,9 +28,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -85,7 +82,6 @@ public class MovieDetailsActivityFragment extends Fragment {
             ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(str_values[3] + "/10"); // User Rating Value
 
             ((TextView) rootView.findViewById(R.id.release_date_value)).setText(str_values[5].split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
-
 
             /*
             *   6. Video_Choice
@@ -219,8 +215,6 @@ public class MovieDetailsActivityFragment extends Fragment {
                 }
 
                 Movies_Data = buffer.toString();
-
-                // Log.i("TheMovieDB JSON Data:", Movies_Data);
             }
 
             // This Exception will occur whenever there is MALFORMED URL
@@ -251,7 +245,6 @@ public class MovieDetailsActivityFragment extends Fragment {
                     }
                 }
             }
-
             return (Movies_Data);
         }
 
@@ -260,5 +253,4 @@ public class MovieDetailsActivityFragment extends Fragment {
             super.onPostExecute(string);
         }
     }
-
 }

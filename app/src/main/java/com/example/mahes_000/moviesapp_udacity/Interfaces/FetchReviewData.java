@@ -49,7 +49,6 @@ public class FetchReviewData extends AsyncTask<String, Void, ArrayList<ReviewIte
 
     }
 
-
     private ArrayList<ReviewItem> getJSONData(String json_data) {
 
         ArrayList<ReviewItem> reviewItems = new ArrayList<>();
