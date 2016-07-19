@@ -20,6 +20,9 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.mahes_000.moviesapp_udacity.Adapters.GridViewAdapter;
+import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
+import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchMovieData;
 import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 
 import java.util.ArrayList;

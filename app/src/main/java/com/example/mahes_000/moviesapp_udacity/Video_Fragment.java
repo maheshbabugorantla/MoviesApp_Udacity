@@ -8,12 +8,18 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import com.example.mahes_000.moviesapp_udacity.Adapters.VideosAdapter;
+import com.example.mahes_000.moviesapp_udacity.DataModels.VideoItem;
+import com.example.mahes_000.moviesapp_udacity.Decorations.DividerItemDecoration;
+import com.example.mahes_000.moviesapp_udacity.Decorations.VerticalSpaceItemDecoration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +44,6 @@ public class Video_Fragment extends Fragment {
     private String LOG_TAG = Video_Fragment.class.getSimpleName();
     String Movies_Data = null;
     String Video_Choice = null;
-
 
     private boolean isNetworkAvailable() {
         /*
@@ -80,9 +85,18 @@ public class Video_Fragment extends Fragment {
                 VideosAdapter videosAdapter = new VideosAdapter(getContext(), videos);
 
                 (Video_View.findViewById(R.id.videos_error)).setVisibility(View.INVISIBLE);
-                ListView videos_list = (ListView) Video_View.findViewById(R.id.videos_list);
+                RecyclerView videos_list = (RecyclerView) Video_View.findViewById(R.id.videos_list);
                 videos_list.setVisibility(View.VISIBLE);
+
+                videos_list.setLayoutManager(new LinearLayoutManager(getContext()));
+
+                // Adding the Item Decoration
+                videos_list.addItemDecoration(new VerticalSpaceItemDecoration(48));
+                videos_list.addItemDecoration(new DividerItemDecoration(getActivity()));
+                videos_list.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.divider));
+
                 videos_list.setAdapter(videosAdapter);
+
             } else {
                 // When there are no Videos to display Hiding the videos List and printing the Error Message (This also works fine when there is network connection drop)
                 (Video_View.findViewById(R.id.videos_list)).setVisibility(View.INVISIBLE);
@@ -91,7 +105,6 @@ public class Video_Fragment extends Fragment {
                 videos_error.setVisibility(View.VISIBLE);
             }
         }
-
         return Video_View;
     }
 

@@ -1,4 +1,4 @@
-package com.example.mahes_000.moviesapp_udacity;
+package com.example.mahes_000.moviesapp_udacity.Adapters;
 
 
 import android.content.Context;
@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
+import com.example.mahes_000.moviesapp_udacity.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

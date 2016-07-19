@@ -1,4 +1,4 @@
-package com.example.mahes_000.moviesapp_udacity;
+package com.example.mahes_000.moviesapp_udacity.DataModels;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public class VideoItem {
 
-    public String Key_value;
+    private String Key_value;
 
     public VideoItem(JSONObject jsonObject)
     {
@@ -20,6 +20,11 @@ public class VideoItem {
         {
             e.printStackTrace();
         }
+    }
+
+    public String getURL()
+    {
+        return Key_value;
     }
 
 }

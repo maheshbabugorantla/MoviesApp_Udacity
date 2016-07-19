@@ -1,6 +1,6 @@
 package com.example.mahes_000.moviesapp_udacity.Interfaces;
 
-import com.example.mahes_000.moviesapp_udacity.ImageItem;
+import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 
 import java.util.ArrayList;
 

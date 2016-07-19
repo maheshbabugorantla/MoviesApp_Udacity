@@ -8,7 +8,7 @@
     tools:context="com.example.mahes_000.moviesapp_udacity.MovieDetailsActivityFragment"
     android:background="#ffffff">
 
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,7 +31,7 @@
                 android:padding="23dp"
                 android:shadowColor="#8a8a8a"
                 android:elevation="8dp"
-                android:visibility="invisible"/>
+                android:visibility="gone"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,7 +126,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
-
+    </android.support.v4.widget.NestedScrollView>
 
 </RelativeLayout>

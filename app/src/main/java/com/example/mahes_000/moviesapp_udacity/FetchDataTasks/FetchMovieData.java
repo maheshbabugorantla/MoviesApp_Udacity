@@ -1,4 +1,4 @@
-package com.example.mahes_000.moviesapp_udacity;
+package com.example.mahes_000.moviesapp_udacity.FetchDataTasks;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +10,10 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.mahes_000.moviesapp_udacity.BuildConfig;
+import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
+import com.example.mahes_000.moviesapp_udacity.R;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 
 import org.json.JSONArray;

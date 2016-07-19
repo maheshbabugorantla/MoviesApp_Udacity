@@ -1,4 +1,4 @@
-package com.example.mahes_000.moviesapp_udacity.Interfaces;
+package com.example.mahes_000.moviesapp_udacity.FetchDataTasks;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.example.mahes_000.moviesapp_udacity.BuildConfig;
 import com.example.mahes_000.moviesapp_udacity.R;
-import com.example.mahes_000.moviesapp_udacity.ReviewItem;
+import com.example.mahes_000.moviesapp_udacity.DataModels.ReviewItem;
 
 import org.json.JSONArray;
 import org.json.JSONException;

@@ -1,15 +1,15 @@
-package com.example.mahes_000.moviesapp_udacity;
+package com.example.mahes_000.moviesapp_udacity.DataModels;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by mahes_000 on 7/10/2016.
+ * Created by Mahesh Babu Gorantla on 7/10/2016.
  */
 public class ReviewItem {
 
-    public String author;
-    public String content;
+    private String author;
+    private String content;
 
     // Constructor to convert the JSON Object into a Java Class Instance
     public ReviewItem(JSONObject jsonObject)
@@ -23,5 +23,15 @@ public class ReviewItem {
        {
            e.printStackTrace();
        }
+    }
+
+    public String getAuthor()
+    {
+        return author;
+    }
+
+    public String getContent()
+    {
+        return content;
     }
 }

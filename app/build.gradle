@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        MoviesApp_Release {
+            keyAlias 'Verdana'
+            keyPassword '!VerilogHD1080p'
+            storeFile file('C:/Users/mahes_000/Android_Release_KeyStore/MoviesApp_Udacity.jks')
+            storePassword '!VerilogHD1080p'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-
     defaultConfig {
         applicationId "com.example.mahes_000.moviesapp_udacity"
         minSdkVersion 21
@@ -13,14 +20,14 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
         }
     }
-
     buildTypes.each
             {
-                it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY', "\"THE_MOVIE_DB_API\""
+                it.buildConfigField 'String', 'THE_MOVIE_DB_API_KEY', "\"2117c386bdd865562ccf2a210dfc49ef\""
             }
 }
 
@@ -32,7 +39,8 @@ repositories{
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:appcompat-v7:24.0.0-alpha2'
-    compile 'com.android.support:support-v4:24.0.0-alpha2'
-    compile 'com.google.code.gson:gson:2.6.2'
+    compile 'com.android.support:appcompat-v7:23.0.0-alpha2'
+    compile 'com.android.support:support-v4:23.0.0-alpha2'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:palette-v7:23.3.0'
 }

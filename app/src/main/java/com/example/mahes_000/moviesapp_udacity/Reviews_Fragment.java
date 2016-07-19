@@ -6,12 +6,17 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchReviewData;
+import com.example.mahes_000.moviesapp_udacity.Adapters.ReviewsAdapter;
+import com.example.mahes_000.moviesapp_udacity.DataModels.ReviewItem;
+import com.example.mahes_000.moviesapp_udacity.Decorations.DividerItemDecoration;
+import com.example.mahes_000.moviesapp_udacity.Decorations.VerticalSpaceItemDecoration;
+import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchReviewData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,10 +49,9 @@ public class Reviews_Fragment extends Fragment {
         return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View Reviews_View = inflater.inflate(R.layout.fragment_reviews, container, false);
 
         Intent intent = getActivity().getIntent();
@@ -67,6 +71,7 @@ public class Reviews_Fragment extends Fragment {
             Video_Choice = intent_values[6];
 
             reviews.clear();
+
             // Fetching the Data reviews for the Movie/TV Show.
             try
             {
@@ -76,7 +81,6 @@ public class Reviews_Fragment extends Fragment {
             {
                 e.printStackTrace();
             }
-
         }
 
         // If there is no network connection
@@ -93,7 +97,15 @@ public class Reviews_Fragment extends Fragment {
             }
         }
 
-        ListView reviews_list = (ListView) Reviews_View.findViewById(R.id.reviews_list);
+        RecyclerView reviews_list = (RecyclerView) Reviews_View.findViewById(R.id.reviews_list);
+
+        reviews_list.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Adding the Item Decoration
+        reviews_list.addItemDecoration(new VerticalSpaceItemDecoration(48));
+        reviews_list.addItemDecoration(new DividerItemDecoration(getActivity()));
+        reviews_list.addItemDecoration(new DividerItemDecoration(getActivity()));
+
         reviews_list.setAdapter(reviewsAdapter);
 
         return Reviews_View;

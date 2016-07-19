@@ -1,4 +1,4 @@
-package com.example.mahes_000.moviesapp_udacity;
+package com.example.mahes_000.moviesapp_udacity.DataModels;
 
 /**
  * Created by mahes_000 on 6/30/2016.

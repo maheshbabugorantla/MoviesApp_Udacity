@@ -2,7 +2,8 @@
 <resources>
     <item name="primary" type="color">#3F51B5</item>
     <item name="primary_dark" type="color">#303F9F</item>
-    <item name="accent" type="color">#536FDE</item>
+<!--    <item name="accent" type="color">#536FDE</item>-->
+    <item name="accent" type="color">#FF4081</item>
     <item name="white" type="color">#ffffff</item>
     <item name="black" type="color">#000000</item>
 </resources>
