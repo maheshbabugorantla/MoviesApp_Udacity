@@ -17,7 +17,7 @@
 ![mainfragment_land](https://cloud.githubusercontent.com/assets/3885116/16655065/b14a0c78-4426-11e6-89f0-427cf61ac99d.png)
 
 ### MovieSummary
-![movie_summary](https://cloud.githubusercontent.com/assets/3885116/16655088/cb9d711e-4426-11e6-8dae-b7009c2cfdba.png)
+![movie_summary](https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png)
 
 ### Settings Menu
 ![settings_1](https://cloud.githubusercontent.com/assets/3885116/16655166/1fdffa12-4427-11e6-959c-e525183d92db.png)
