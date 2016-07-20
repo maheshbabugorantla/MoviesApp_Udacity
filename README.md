@@ -26,12 +26,14 @@
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994137/16d51c5c-4e74-11e6-9555-e5f41426b36f.png" height="800" width="420" align="right"></div>
   <br>
-  <div id="trailers"><img src="https://cloud.githubusercontent.com/assets/3885116/16994591/0498fcc8-4e76-11e6-9921-ecf5445084cb.png" height="800" width="420" align="right"></div>
+  <div id="trailers"><img src="https://cloud.githubusercontent.com/assets/3885116/16994591/0498fcc8-4e76-11e6-9921-ecf5445084cb.png" height="800" width="420" align="center"></div>
+  <br>
 </div>
 
 
 ### Settings Menu
 <div id="movie_settings">
+<br>
   <div id="ratings" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16655166/1fdffa12-4427-11e6-959c-e525183d92db.png" height="800" width="420" align="left"></div>
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16655181/2e38eaba-4427-11e6-8d68-7fd2d811d3b8.png" height="800" width="420" align="right"></div>
