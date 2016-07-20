@@ -10,8 +10,15 @@
 ## Below are the screenshots of the Current Status of Application
 
 ### MainScreen
-![mainfragment](https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png)
-<p><br></p>
+
+<div id="MainScreen">
+  <div id="movie" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png" height="800" width="420" align="left"></div>
+
+  <div id="tv_shows" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994508/9b2178e2-4e75-11e6-9479-d2f1f7ba4e39.png" height="800" width="420" align="right"></div>
+  
+  <p><br></p>
+</div>
+
 ### MainScreen LandScape
 ![mainfragment_land](https://cloud.githubusercontent.com/assets/3885116/16655065/b14a0c78-4426-11e6-89f0-427cf61ac99d.png)
 <p><br></p>
@@ -22,9 +29,11 @@
   <div id="summary" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="800" width="420" align="left"></div>
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994137/16d51c5c-4e74-11e6-9555-e5f41426b36f.png" height="800" width="420" align="right"></div>
+  
+  <p><br></p>
 </div>
-<p><br></p>
-<p><br></p>
+
+
 ### Settings Menu
 <div id="movie_settings">
   <div id="ratings" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16655166/1fdffa12-4427-11e6-959c-e525183d92db.png" height="800" width="420" align="left"></div>
@@ -32,14 +41,13 @@
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16655181/2e38eaba-4427-11e6-8d68-7fd2d811d3b8.png" height="800" width="420" align="right"></div>
 </div>
 
-<p><br></p>
 
 ### APIs Used
 <ol>
   <li><a href="http://square.github.io/picasso/">Picasso</a></li>
 </ol>
 
-<p><br></p>
+
 
 ### Future Goals
 <ol>
