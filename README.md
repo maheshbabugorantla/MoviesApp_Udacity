@@ -19,7 +19,7 @@
 ### MovieSummary
 ![movie_summary](https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png)
 
-<img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="1000" width="1000" >
+<img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="800" width="500" >
 
 ### Settings Menu
 ![settings_1](https://cloud.githubusercontent.com/assets/3885116/16655166/1fdffa12-4427-11e6-959c-e525183d92db.png)
