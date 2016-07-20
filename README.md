@@ -17,18 +17,19 @@
   <div id="tv_shows" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994508/9b2178e2-4e75-11e6-9479-d2f1f7ba4e39.png" height="800" width="420" align="right"></div>
 </div>
 
-####
+###
+###
 
 ### MovieSummary
 
 <div id="movie_summary">
-  <div id="summary" display="inline-block" margin-bottom="30px"><img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="800" width="420" align="left"></div>
+  <div id="summary" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="800" width="420" align="left"></div>
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994137/16d51c5c-4e74-11e6-9555-e5f41426b36f.png" height="800" width="420" align="right"></div>
   
   <p><br></p>
   
-  <div id="trailers" margin-top="15px"><img src="https://cloud.githubusercontent.com/assets/3885116/16994591/0498fcc8-4e76-11e6-9921-ecf5445084cb.png" height="800" width="420" align="centre"></div>
+  <div id="trailers"><img src="https://cloud.githubusercontent.com/assets/3885116/16994591/0498fcc8-4e76-11e6-9921-ecf5445084cb.png" height="800" width="420" align="centre"></div>
   
 </div>
 
