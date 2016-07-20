@@ -26,10 +26,10 @@
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994137/16d51c5c-4e74-11e6-9555-e5f41426b36f.png" height="800" width="420" align="right"></div>
   
-  <div> </div>
+  <p><br></p>
   
   <div id="trailers" margin-top="15px"><img src="https://cloud.githubusercontent.com/assets/3885116/16994591/0498fcc8-4e76-11e6-9921-ecf5445084cb.png" height="800" width="420" align="centre"></div>
-  <br>
+  
 </div>
 
 
