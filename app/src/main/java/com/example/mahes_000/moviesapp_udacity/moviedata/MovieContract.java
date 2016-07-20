@@ -107,6 +107,9 @@ public class MovieContract {
         // Review from Each User
         public static final String COLUMN_REVIEW = "review";
 
+        // User Name
+        public static final String COLUMN_AUTHOR = "author";
+
         // Defining a method to build a URI to find a specific movie reviews by its identifier.
         public static Uri buildMovieReviewsUri(long id)
         {
@@ -185,6 +188,9 @@ public class MovieContract {
 
         // This is the Review for TV Show
         public static final String COLUMN_REVIEW = "review";
+
+        // User Name
+        public static final String COLUMN_AUTHOR = "author";
 
         // Defining a method to build a URI to find a specific TV show reviews by its identifier.
         public static Uri buildTVReviewsUri(long id)

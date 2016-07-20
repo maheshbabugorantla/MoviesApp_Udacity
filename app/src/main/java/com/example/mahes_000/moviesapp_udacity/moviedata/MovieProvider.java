@@ -269,6 +269,7 @@ public class MovieProvider extends ContentProvider {
 
         SQLiteDatabase database = mOpenHelper.getWritableDatabase();
         int rows;
+        long _id;
 
         switch (sUriMatcher.match(uri)) {
             case MOVIE:
@@ -276,6 +277,7 @@ public class MovieProvider extends ContentProvider {
                 break;
 
             case MOVIE_REVIEW:
+                _id = ContentUris.parseId(uri);
                 rows = database.update(MovieContract.MovieReviews.TABLE_NAME, values, selection, selectionArgs);
                 break;
 

@@ -16,7 +16,7 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
     // If need to change the database schema, Increment the Number here
     // The Database Version typically starts at version '1', and must be manually incremented each time we release a new APK.
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     public static final String DATABASE_NAME = "moviestv.db";
 
@@ -53,10 +53,14 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
                 MovieReviews.COLUMN_MOVIE_ID + " INTEGER NOT NULL, " +
                 MovieReviews.COLUMN_REVIEW + " TEXT NOT NULL, " +
+                MovieReviews.COLUMN_AUTHOR + " TEXT NOT NULL, " +
 
                 // Set the Movie ID Column as a foreign key from MovieEntry table
                 " FOREIGN KEY (" + MovieReviews.COLUMN_MOVIE_ID + ") REFERENCES " +
-                MovieEntry.TABLE_NAME + " (" + MovieEntry.COLUMN_MOVIE_ID + "));";
+                MovieEntry.TABLE_NAME + " (" + MovieEntry.COLUMN_MOVIE_ID + ")" +
+
+                // This is to make sure that there is only one review Per Author per Movie.
+                " UNIQUE (" + MovieReviews.COLUMN_MOVIE_ID + ", " + MovieReviews.COLUMN_AUTHOR + ") ON CONFLICT REPLACE);";
 
         final String SQL_CREATE_TV_ENTRY = "CREATE TABLE " + TVEntry.TABLE_NAME + " (" +
 
@@ -81,11 +85,14 @@ public class MovieDBHelper extends SQLiteOpenHelper {
 
                 TVReviews.COLUMN_TV_ID + " INTEGER NOT NULL, " +
                 TVReviews.COLUMN_REVIEW + " TEXT NOT NULL, " +
+                TVReviews.COLUMN_AUTHOR + " TEXT NOT NULL, " +
 
                 // Set the Movie ID Column as a foreign key from MovieEntry table
                 " FOREIGN KEY (" + TVReviews.COLUMN_TV_ID + ") REFERENCES " +
-                TVEntry.TABLE_NAME + " (" + TVEntry.COLUMN_TV_ID + "));";
+                TVEntry.TABLE_NAME + " (" + TVEntry.COLUMN_TV_ID + ")" +
 
+                // This is to make sure that there is only one review Per Author per Movie.
+                " UNIQUE (" + TVReviews.COLUMN_TV_ID + ", " + TVReviews.COLUMN_AUTHOR + ") ON CONFLICT REPLACE);";
 
         // Executing the SQL Commands
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIE_ENTRY);

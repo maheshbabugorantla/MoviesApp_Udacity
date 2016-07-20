@@ -176,8 +176,10 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
                 }
             }
 
+            /* This code needs to be Moved Some Where Else */
+
             // The below code is used to display what we stored in the bulkInsert method.
-            String sortOrder = " ";
+            String sortOrder;
             if (Movies_Choice.equals("top_rated")) {
                 sortOrder = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
             } else {

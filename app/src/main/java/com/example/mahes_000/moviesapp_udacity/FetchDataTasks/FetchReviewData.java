@@ -1,5 +1,6 @@
 package com.example.mahes_000.moviesapp_udacity.FetchDataTasks;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.util.Log;
 import com.example.mahes_000.moviesapp_udacity.BuildConfig;
 import com.example.mahes_000.moviesapp_udacity.R;
 import com.example.mahes_000.moviesapp_udacity.DataModels.ReviewItem;
+import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  *  Created by Mahesh Babu Gorantla on 7/16/2016.
@@ -39,8 +42,12 @@ public class FetchReviewData extends AsyncTask<String, Void, ArrayList<ReviewIte
 
     private static final String LOG_TAG = FetchReviewData.class.getSimpleName();
 
+    private final Context mContext;
+
 
     public FetchReviewData(Context context) {
+
+        mContext = context;
 
         // Getting the User Preferences.
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -65,11 +72,34 @@ public class FetchReviewData extends AsyncTask<String, Void, ArrayList<ReviewIte
             {
                 JSONArray reviews = reader.getJSONArray("results");
 
+                String Movie_ID = reader.getString("id");
+
                 int review_count = reviews.length();
+
+                Vector<ContentValues> cVVector = new Vector<>(review_count);
 
                 for (int index = 0; index < review_count; index++)
                 {
-                    reviewItems.add(new ReviewItem(reviews.getJSONObject(index)));
+                    ContentValues review_values = new ContentValues();
+                    JSONObject review = reviews.getJSONObject(index);
+                    reviewItems.add(new ReviewItem(review));
+
+                    review_values.put(MovieContract.MovieReviews.COLUMN_AUTHOR, review.getString("author"));
+                    review_values.put(MovieContract.MovieReviews.COLUMN_REVIEW, review.getString("content"));
+
+                    review_values.put(MovieContract.MovieReviews.COLUMN_MOVIE_ID, Movie_ID);
+
+                    cVVector.add(review_values);
+                }
+
+                if(cVVector.size() > 0)
+                {
+                    ContentValues[] cvArray = new ContentValues[cVVector.size()];
+                    cVVector.toArray(cvArray);
+
+                    mContext.getContentResolver().bulkInsert(MovieContract.MovieReviews.buildMovieReviewsUri(9), cvArray);
+
+                    Log.d(LOG_TAG, "FetchReviewData Complete. " + cVVector.size() + " Inserted");
                 }
             }
             else
@@ -180,4 +210,3 @@ public class FetchReviewData extends AsyncTask<String, Void, ArrayList<ReviewIte
         super.onPostExecute(reviews);
     }
 }
-
