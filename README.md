@@ -10,24 +10,22 @@
 ## Below are the screenshots of the Current Status of Application
 
 ### MainScreen
-
 ![mainfragment](https://cloud.githubusercontent.com/assets/3885116/16654790/611df8dc-4425-11e6-90d4-9ee8fe69a35a.png)
 <p><br></p>
 ### MainScreen LandScape
 ![mainfragment_land](https://cloud.githubusercontent.com/assets/3885116/16655065/b14a0c78-4426-11e6-89f0-427cf61ac99d.png)
 <p><br></p>
+
 ### MovieSummary
-<p><br></p>
+
 <div id="movie_summary">
   <div id="summary" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16993782/cc199202-4e72-11e6-87a1-11f2c0ed1d24.png" height="800" width="420" align="left"></div>
 
   <div id="reviews" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16994137/16d51c5c-4e74-11e6-9555-e5f41426b36f.png" height="800" width="420" align="right"></div>
 </div>
-
 <p><br></p>
-
+<p><br></p>
 ### Settings Menu
-<p><br></p>
 <div id="movie_settings">
   <div id="ratings" display="inline-block"><img src="https://cloud.githubusercontent.com/assets/3885116/16655166/1fdffa12-4427-11e6-959c-e525183d92db.png" height="800" width="420" align="left"></div>
 
