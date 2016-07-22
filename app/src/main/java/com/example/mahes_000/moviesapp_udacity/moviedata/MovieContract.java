@@ -79,6 +79,12 @@ public class MovieContract {
         // Favorites Indicator
         public static final String COLUMN_FAVORITES = "favorites";
 
+        // Back Drop Path
+        public static final String COLUMN_BACKDROP = "backdrop_path";
+
+        // Page Number from the API
+        public static final String COLUMN_PAGE = "page_no";
+
         // Defining a method to build a URI to find a specific movie by its identifier.
         public static Uri buildMovieUri(long id)
         {
@@ -162,6 +168,13 @@ public class MovieContract {
 
         // Favorites Indicator
         public static final String COLUMN_FAVORITES = "favorites";
+
+        // Back Drop Path
+        public static final String COLUMN_BACKDROP = "backdrop_path";
+
+        // Page Number from the API
+        public static final String COLUMN_PAGE = "page_no";
+
 
         // Defining a method to build a URI to find a specific TV Show by its identifier.
         public static Uri buildTVUri(long id)

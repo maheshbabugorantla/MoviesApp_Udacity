@@ -4,6 +4,7 @@ package com.example.mahes_000.moviesapp_udacity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -11,6 +12,9 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +25,11 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.mahes_000.moviesapp_udacity.Adapters.GridViewAdapter;
+import com.example.mahes_000.moviesapp_udacity.Adapters.MovieCursorAdapter;
 import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchMovieData;
-import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
+import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
+/*import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;*/
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,13 +40,18 @@ import java.util.concurrent.ExecutionException;
  * A placeholder fragment containing a simple view.
  */
 
-public class MainActivityFragment extends Fragment implements FetchMovieDataInterface{
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> /* , FetchMovieDataInterface*/{
     String[] final_values = null;
 
     private GridView gridView;
     private ProgressBar progressBar;
     private GridViewAdapter gridViewAdapter;
-    private ArrayList<ImageItem> mGridData;
+    //private ArrayList<ImageItem> mGridData;
+
+    private MovieCursorAdapter mMovieCursorAdapter;
+
+    // Identifer for CURSOR Loader
+    private static final int FORECAST_LOADER = 0;
 
     String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
 
@@ -81,10 +92,14 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
+/*
         mGridData = new ArrayList<>();
         gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
+*/
 
-        gridView.setAdapter(gridViewAdapter);
+        mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0);
+
+        gridView.setAdapter(mMovieCursorAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,11 +132,16 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+
+        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
+
         if (savedInstanceState != null) {
             gridState = savedInstanceState.getParcelable(LIST_STATE);
             Log.d("In onActivityCreated", "Retrieving the Saved Instance State");
         }
+
+        super.onActivityCreated(savedInstanceState);
+
     }
 
     @Override
@@ -160,11 +180,13 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
 
     public boolean LoadMoreData(String page) {
         if (isNetworkAvailable()) {
-            FetchMovieData movieData = new FetchMovieData(getActivity(), MainActivityFragment.this);
+            FetchMovieData movieData = new FetchMovieData(getActivity()); /*MainActivityFragment.this);*/
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, page).get();
 
                 Collections.addAll(movie_desc, final_values);
+
+                mMovieCursorAdapter.notifyDataSetChanged();
 
                 return true;
 
@@ -174,7 +196,7 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
                 e.printStackTrace();
             }
         } else {
-            mGridData.clear();
+            //mGridData.clear();
             movie_desc.clear();
             Toast.makeText(getActivity(), "Unable to get more movies, No Internet available.\nConnect to the internet and Re-open the App", Toast.LENGTH_LONG).show();
             return false;
@@ -198,10 +220,10 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
         System.out.println("Movies Choice " + Video_Choice);
 
         if (isNetworkAvailable()) {
-            mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
+           // mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
             movie_desc.clear(); // resetting all Movie Details
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
-            FetchMovieData movieData = new FetchMovieData(getActivity(), MainActivityFragment.this);
+            FetchMovieData movieData = new FetchMovieData(getActivity());/*, MainActivityFragment.this);*/
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, "1").get();
 
@@ -219,13 +241,15 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
 
             //getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
+            mMovieCursorAdapter.notifyDataSetChanged();
         } else {
-            mGridData.clear();
+           // mGridData.clear();
             movie_desc.clear();
             Toast.makeText(getActivity(), "Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
         }
     }
 
+/*
     @Override
     public void onDownloadComplete(ArrayList<ImageItem> gridData) {
         mGridData.addAll(gridData);
@@ -237,5 +261,37 @@ public class MainActivityFragment extends Fragment implements FetchMovieDataInte
     public void onDownloadReviews() {
         return;
     }
+*/
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        // The below code is used to display what we stored in the bulkInsert method.
+        String sortOrder;
+        if (Movies_Choice.equals("top_rated")) {
+            sortOrder = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
+        } else {
+            sortOrder = MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
+        }
+
+        // The code below is used to query the database
+        if (Video_Choice.equals("movie")) {
+            return new CursorLoader(getActivity(), MovieContract.MovieEntry.CONTENT_URI, null, null, null, sortOrder);
+        } else if (Video_Choice.equals("tv")) {
+            return new CursorLoader(getActivity(), MovieContract.TVEntry.CONTENT_URI, null, null, null, sortOrder);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mMovieCursorAdapter.swapCursor(data);
+        mMovieCursorAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mMovieCursorAdapter.swapCursor(null);
+    }
 }

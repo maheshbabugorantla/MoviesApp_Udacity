@@ -40,18 +40,19 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
     String Movies_Data = null;
     String Video_Choice = "movie";
     String Movies_Choice = "top_rated";
+    String Page_no = "1";
 
     private ArrayList<ImageItem> mMoviesGrid = new ArrayList<>();
     private final Context mContext;
 
-    private FetchMovieDataInterface movieDataInterface;
+    //private FetchMovieDataInterface movieDataInterface;
 
     private static final String LOG_TAG = FetchMovieData.class.getSimpleName();
 
-    public FetchMovieData(Context context, FetchMovieDataInterface activityContext) {
+    public FetchMovieData(Context context)/*, FetchMovieDataInterface activityContext)*/ {
 
         mContext = context;
-        this.movieDataInterface = activityContext;
+        //this.movieDataInterface = activityContext;
 
         // Getting the User Preferences.
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -64,7 +65,7 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
 
     private boolean DEBUG = true;
 
-    private String[] getJSONData(String json_data)
+    private String[] getJSONData(String json_data, String page_no)
     {
         // This will be returned when the parsing doesn't work as expected.
         String[] Data_movies = null;
@@ -133,7 +134,8 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
                 stringBuilder.append(ID);
                 stringBuilder.append("=");
 
-                stringBuilder.append(jsonObject.getString("backdrop_path"));
+                String BackDrop_Path = jsonObject.getString("backdrop_path");
+                stringBuilder.append(BackDrop_Path);
 
                 String image_url = "http://image.tmdb.org/t/p/w342/" + jsonObject.getString("poster_path");
                 imageItem.setImage(image_url);
@@ -158,7 +160,10 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
                 movieValues.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, Overview);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, Vote_Average);
                 movieValues.put(MovieContract.MovieEntry.COLUMN_POPULARITY, Popularity);
-                movieValues.put(MovieContract.MovieEntry.COLUMN_FAVORITES, "0");
+                movieValues.put(MovieContract.MovieEntry.COLUMN_FAVORITES, "0"); // Not favorited yet
+                // BackDrop Path
+                movieValues.put(MovieContract.MovieEntry.COLUMN_BACKDROP, BackDrop_Path);
+                movieValues.put(MovieContract.MovieEntry.COLUMN_PAGE, page_no); // Page No in API
 
                 Data_movies[index] = stringBuilder.toString();
 
@@ -176,38 +181,9 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
                 }
             }
 
-            /* This code needs to be Moved Some Where Else */
-
-            // The below code is used to display what we stored in the bulkInsert method.
-            String sortOrder;
-            if (Movies_Choice.equals("top_rated")) {
-                sortOrder = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
-            } else {
-                sortOrder = MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
-            }
-
-            Cursor cursor = null;
-            // The code below is used to query the database
-            if (Video_Choice.equals("movie")) {
-                cursor = mContext.getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI, null, null, null, sortOrder);
-            } else if (Video_Choice.equals("tv")) {
-                cursor = mContext.getContentResolver().query(MovieContract.TVEntry.CONTENT_URI, null, null, null, sortOrder);
-            }
-
-            if (cursor != null) {
-                cVVector = new Vector<>(cursor.getCount());
-            }
-
-            if(cursor.moveToFirst())
-            {
-                do {
-                    ContentValues contentValues = new ContentValues();
-                    DatabaseUtils.cursorRowToContentValues(cursor,contentValues);
-                    cVVector.add(contentValues);
-                }while (cursor.moveToNext());
-            }
 
             Log.d(LOG_TAG, "FetchMovieData Complete. " + cVVector.size() + " Inserted");
+
         }
 
         catch (JSONException e)
@@ -238,6 +214,8 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
         final String API_Key = BuildConfig.THE_MOVIE_DB_API_KEY;
         final String ID = "api_key";
         final String Page = "page";
+
+        Page_no = page_no; // This is used to store the Number of page in API from where the results are fetched.
 
         Uri BuiltUri = Uri.parse(MOVIES_BASE_URL).buildUpon().appendPath(Video_Type).appendPath(Movie_Choice).appendQueryParameter(ID, API_Key).appendQueryParameter(Page,page_no).build();
 
@@ -325,7 +303,7 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
 
         try
         {
-            return getJSONData(Movies_Data);
+            return getJSONData(Movies_Data, Page_no);
         }
         catch (NullPointerException e)
         {
@@ -338,6 +316,6 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
     @Override
     protected void onPostExecute(String[] s)
     {
-        movieDataInterface.onDownloadComplete(mMoviesGrid);
+        //movieDataInterface.onDownloadComplete(mMoviesGrid);
     }
 }
