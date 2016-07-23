@@ -2,11 +2,13 @@ package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,6 +47,8 @@ public class Video_Fragment extends Fragment {
     String Movies_Data = null;
     String Video_Choice = null;
 
+    private Context mContext;
+
     private boolean isNetworkAvailable() {
         /*
             Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
@@ -68,12 +72,15 @@ public class Video_Fragment extends Fragment {
 
         ArrayList<VideoItem> videos;
 
+        mContext = getContext();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Video_Choice = sharedPreferences.getString(mContext.getString(R.string.pref_video_choice_key), mContext.getString(R.string.pref_video_choice_default));
+
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && isNetworkAvailable) {
             String intent_text = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-            String[] intent_values = intent_text.split("=");
-            String ID = intent_values[7];
-            Video_Choice = intent_values[6];
+            String ID = intent_text;
 
             // Fetching the Movie/TV Show URLs
             getMovieData(ID, Video_Choice);

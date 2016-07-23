@@ -28,6 +28,7 @@ import com.example.mahes_000.moviesapp_udacity.Adapters.GridViewAdapter;
 import com.example.mahes_000.moviesapp_udacity.Adapters.MovieCursorAdapter;
 import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchMovieData;
+import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 /*import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;*/
 
@@ -40,7 +41,10 @@ import java.util.concurrent.ExecutionException;
  * A placeholder fragment containing a simple view.
  */
 
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> /* , FetchMovieDataInterface*/{
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, FetchMovieDataInterface{
+
+    private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
+
     String[] final_values = null;
 
     private GridView gridView;
@@ -50,7 +54,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private MovieCursorAdapter mMovieCursorAdapter;
 
-    // Identifer for CURSOR Loader
+    // Identifier for CURSOR Loader
     private static final int FORECAST_LOADER = 0;
 
     String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
@@ -64,7 +68,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     // This is used to select between the "popular" and "top_rated"
     String Movies_Choice = "top_rated";
-    String Video_Choice = "movies";
+    String Video_Choice = "movie";
 
     public MainActivityFragment() {
         setHasOptionsMenu(true);
@@ -97,7 +101,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
 */
 
-        mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0);
+        mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0, MainActivityFragment.this);
 
         gridView.setAdapter(mMovieCursorAdapter);
 
@@ -113,9 +117,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         gridView.setOnScrollListener(new EndlessScrollListener() {
             @Override
             public boolean onLoadMore(int page, int totalItemsCount) {
-/*
-                scrollIndex = gridView.getFirstVisiblePosition();
-*/
 
                 if (page == 1) {
                     return false;
@@ -141,7 +142,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
 
         super.onActivityCreated(savedInstanceState);
-
     }
 
     @Override
@@ -155,18 +155,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     // This function is called when the fragment is available for the user to Start Interacting
     @Override
     public void onResume() {
+
+        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+
         if (gridState != null) {
             gridView.onRestoreInstanceState(gridState);
             Log.d("MainActivityFragment", "trying to restore gridView state..");
         }
+
+        mMovieCursorAdapter.clearIDsList();
         gridState = null;
         super.onResume();
-/*
-        if(scrollIndex != 0)
-        {
-            gridView.thScrollToPosition(scrollIndex);
-        }
-*/
+
     }
 
     @Override
@@ -179,12 +179,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
 
     public boolean LoadMoreData(String page) {
+
         if (isNetworkAvailable()) {
             FetchMovieData movieData = new FetchMovieData(getActivity()); /*MainActivityFragment.this);*/
+
+            Log.i(LOG_TAG, "Inside LoadMoreData ");
+
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, page).get();
 
-                Collections.addAll(movie_desc, final_values);
+                Log.i(LOG_TAG, "final values: " + final_values);
+
+                //Collections.addAll(movie_desc, final_values);
 
                 mMovieCursorAdapter.notifyDataSetChanged();
 
@@ -217,17 +223,19 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
 
         System.out.println("Movies Choice " + Movies_Choice);
-        System.out.println("Movies Choice " + Video_Choice);
+        System.out.println("Videos Choice " + Video_Choice);
 
         if (isNetworkAvailable()) {
            // mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
             movie_desc.clear(); // resetting all Movie Details
+            mMovieCursorAdapter.clearIDsList();
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
             FetchMovieData movieData = new FetchMovieData(getActivity());/*, MainActivityFragment.this);*/
+
             try {
                 final_values = movieData.execute(Movies_Choice, Video_Choice, "1").get();
 
-                Collections.addAll(movie_desc, final_values);
+                //Collections.addAll(movie_desc, final_values);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -266,15 +274,21 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        // The below code is used to display what we stored in the bulkInsert method.
+        mMovieCursorAdapter.clearIDsList();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
+        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
+
+        // The code below is used to query the database
         String sortOrder;
+
         if (Movies_Choice.equals("top_rated")) {
             sortOrder = MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE + " DESC";
         } else {
             sortOrder = MovieContract.MovieEntry.COLUMN_POPULARITY + " DESC";
         }
 
-        // The code below is used to query the database
         if (Video_Choice.equals("movie")) {
             return new CursorLoader(getActivity(), MovieContract.MovieEntry.CONTENT_URI, null, null, null, sortOrder);
         } else if (Video_Choice.equals("tv")) {
@@ -293,5 +307,20 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mMovieCursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    public void onDownloadComplete(ArrayList<ImageItem> gridData) {
+
+    }
+
+    @Override
+    public void onDownloadReviews() {
+
+    }
+
+    @Override
+    public void getIds(ArrayList<String> Movie_IDs) {
+        movie_desc = Movie_IDs;
     }
 }

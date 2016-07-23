@@ -2,6 +2,8 @@ package com.example.mahes_000.moviesapp_udacity.Adapters;
 
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.CursorAdapter;
 import android.database.Cursor;
 import android.util.Log;
@@ -11,31 +13,58 @@ import android.view.LayoutInflater;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 import com.example.mahes_000.moviesapp_udacity.R;
 
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.MovieEntry;
-import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.MovieReviews;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.TVEntry;
-import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.TVReviews;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 /**
- * Created by mahes_000 on 7/20/2016.
+ * Created by Mahesh Babu Gorantla on 7/20/2016.
+ *
+ * This will be the Cursor Adapter to fetch the Data from the Database
  */
 public class MovieCursorAdapter extends CursorAdapter {
 
     private Context mContext;
 
-    public MovieCursorAdapter(Context context, Cursor cursor, int flags) {
+    private String Video_Choice = "movie";
+
+    private ArrayList<String> IDs = new ArrayList<>();
+
+    private FetchMovieDataInterface mFetchMovieDataInterface;
+
+    public MovieCursorAdapter(Context context, Cursor cursor, int flags, FetchMovieDataInterface activityContext) {
         super(context, cursor, flags);
+
         this.mContext = context;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Video_Choice = sharedPreferences.getString(context.getString(R.string.pref_video_choice_key), context.getString(R.string.pref_video_choice_default));
+
+        this.mFetchMovieDataInterface = activityContext;
+
     }
 
-    private String convertCursortoData(Cursor cursor)
-    {
+    private String convertCursortoData(Cursor cursor) {
         // Image Path
         int image_thumb = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
-        int release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
+
+        int release_date;
+        if (Video_Choice.equals("movie")) {
+
+            release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
+            IDs.add(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID)));
+
+        } else {
+
+            release_date = cursor.getColumnIndex(TVEntry.COLUMN_RELEASE_DATE);
+            IDs.add(cursor.getString(cursor.getColumnIndex(TVEntry.COLUMN_TV_ID)));
+        }
+
+        mFetchMovieDataInterface.getIds(IDs);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(cursor.getString(release_date))
@@ -57,9 +86,6 @@ public class MovieCursorAdapter extends CursorAdapter {
     /* This is where we fill in the Data for each View */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        /* Write Utility Functions to get the Poster Path and Release Year from the Database */
-
-        /* Make Changes to the Database Contract to store the BackDrop path as well */
 
         String cursor_value = convertCursortoData(cursor);
 
@@ -68,19 +94,18 @@ public class MovieCursorAdapter extends CursorAdapter {
         String Image_Path = "http://image.tmdb.org/t/p/w342/" + cursor_values[1];
         String Release_Year = cursor_values[0].split("-")[0];
 
-        Log.i("Cursor Value", cursor_value);
-
         // Setting the Image ThumbNail
         Picasso.with(mContext).load(Image_Path).fit().into((ImageView) view.findViewById(R.id.imageIcon));
 
         // Setting the Release Year for the Movie/TV Show
         ((TextView) view.findViewById(R.id.imageText)).setText(Release_Year);
 
-        /* Think it over if this is required Create an OnItemClickListener to send the Movie_ID as an Intent to the Detail Activity */
-
     }
 
+    public void clearIDsList() {
 
-
-
+        if (IDs != null) {
+            IDs.clear();
+        }
+    }
 }

@@ -182,7 +182,7 @@ public class FetchMovieData extends AsyncTask<String, Void, String[]> {
             }
 
 
-            Log.d(LOG_TAG, "FetchMovieData Complete. " + cVVector.size() + " Inserted");
+            Log.d(LOG_TAG, "FetchMovieData Complete. " + cVVector.size() + " Inserted" + "Page no. " + page_no);
 
         }
 

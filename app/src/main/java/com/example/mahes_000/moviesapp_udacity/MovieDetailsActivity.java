@@ -1,8 +1,11 @@
 package com.example.mahes_000.moviesapp_udacity;
 
-import android.content.Context;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,7 +13,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,11 +28,14 @@ import java.util.List;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-/*
-    private Toolbar toolbar;
-    public CollapsingToolbarLayout collapsingToolbarLayout = null;
-*/
-    ViewPager viewPager = null;
+    // Projections to fetch the required Data.
+    String[] Movie_Columns = {MovieContract.MovieEntry.COLUMN_TITLE, MovieContract.MovieEntry.COLUMN_BACKDROP};
+
+    String[] TV_Columns = {MovieContract.TVEntry.COLUMN_TITLE, MovieContract.TVEntry.COLUMN_BACKDROP};
+
+
+    int COL_TITLE_INDEX = 0;
+    int COL_BACKDROP_INDEX = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,21 +57,38 @@ public class MovieDetailsActivity extends AppCompatActivity {
 */
         Intent intent = getIntent();
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
+
+
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT))
         {
             String movie_details = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-            String[] str_values = movie_details.split("=");
+            Cursor cursor = null;
 
-            String Image_Base_URL = "http://image.tmdb.org/t/p/w500/";
-            String Image_URL = Image_Base_URL + str_values[8];
+            if(Video_Choice.equals("movie"))
+            {
+                cursor = getApplicationContext().getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(movie_details)), Movie_Columns, null, null, null);
+            }
+            else if(Video_Choice.equals("tv"))
+            {
+                cursor = getApplicationContext().getContentResolver().query(MovieContract.TVEntry.buildTVUri(Long.parseLong(movie_details)), TV_Columns, null, null, null);
+            }
 
-            // Setting the Image for the Poster
-            Picasso.with(getApplicationContext()).load(Image_URL).fit().into((ImageView) findViewById(R.id.movie_poster));
+            if(cursor.moveToFirst()) {
+
+                String Image_Base_URL = "http://image.tmdb.org/t/p/w500/";
+                String Image_URL = Image_Base_URL + cursor.getString(COL_BACKDROP_INDEX);
+
+                // Setting the Image for the Poster
+                Picasso.with(getApplicationContext()).load(Image_URL).fit().into((ImageView) findViewById(R.id.movie_poster));
+
+                setupCollapsingToolbar(cursor.getString(COL_TITLE_INDEX));
+            }
 
             setupToolbar();
             setupViewPager();
-            setupCollapsingToolbar(str_values[2]);
         }
     }
 
@@ -106,10 +129,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         collapsingToolbar.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
     }
 
-/*    private void toolbarTextAppearance() {
-        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.collapsedappbar);
-        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.expandedappbar);
-    }*/
+
     private void setupToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -160,26 +180,6 @@ class MyAdapter extends FragmentPagerAdapter {
         mFragmentTitleList.add(title);
     }
 
-/*
-        Fragment fragment = null;
-
-        if(position == 0)
-        {
-            fragment = new MovieDetailsActivityFragment();
-        }
-        else if(position == 1)
-        {
-            fragment = new Reviews_Fragment();
-        }
-        else if(position == 2)
-        {
-            fragment = new Video_Fragment();
-        }
-
-        return fragment;
-    }
-*/
-
     // WhenEver a ViewPager wants to display a page it will call getCount() Method that tells exactly how many pages are there.
     @Override
     public int getCount() {
@@ -192,22 +192,4 @@ class MyAdapter extends FragmentPagerAdapter {
         return mFragmentTitleList.get(position);
     }
 
-/*
-        if(position == 0)
-        {
-            return "DETAILS";
-        }
-
-        else if(position == 1)
-        {
-            return "REVIEWS";
-        }
-
-        else if(position == 2)
-        {
-            return "TRAILERS";
-        }
-
-        return null;
-    }*/
 }
