@@ -21,6 +21,7 @@ import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.TVEntry;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 /**
  * Created by Mahesh Babu Gorantla on 7/20/2016.
@@ -33,18 +34,22 @@ public class MovieCursorAdapter extends CursorAdapter {
 
     private String Video_Choice = "movie";
 
-    private ArrayList<String> IDs = new ArrayList<>();
+/*
+    private LinkedHashSet<String> IDs = new LinkedHashSet<>();
+*/
 
     private FetchMovieDataInterface mFetchMovieDataInterface;
 
-    public MovieCursorAdapter(Context context, Cursor cursor, int flags, FetchMovieDataInterface activityContext) {
+    public MovieCursorAdapter(Context context, Cursor cursor, int flags) { //, FetchMovieDataInterface activityContext)
         super(context, cursor, flags);
 
         this.mContext = context;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Video_Choice = sharedPreferences.getString(context.getString(R.string.pref_video_choice_key), context.getString(R.string.pref_video_choice_default));
 
+/*
         this.mFetchMovieDataInterface = activityContext;
+*/
 
     }
 
@@ -53,23 +58,39 @@ public class MovieCursorAdapter extends CursorAdapter {
         int image_thumb = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
 
         int release_date;
+        int movie_id = 0;
+
         if (Video_Choice.equals("movie")) {
 
             release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
+/*
             IDs.add(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID)));
+*/
+            movie_id = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
 
         } else {
 
             release_date = cursor.getColumnIndex(TVEntry.COLUMN_RELEASE_DATE);
+/*
             IDs.add(cursor.getString(cursor.getColumnIndex(TVEntry.COLUMN_TV_ID)));
+*/
+            movie_id = cursor.getColumnIndex(TVEntry.COLUMN_TV_ID);
         }
 
+/*
         mFetchMovieDataInterface.getIds(IDs);
+*/
+
+/*
+        Log.i("Inside convertCursor", IDs.toString());
+*/
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(cursor.getString(release_date))
                 .append("=")
-                .append(cursor.getString(image_thumb));
+                .append(cursor.getString(image_thumb))
+                .append("=")
+                .append(cursor.getString(movie_id));
 
         return stringBuilder.toString();
     }
@@ -100,12 +121,14 @@ public class MovieCursorAdapter extends CursorAdapter {
         // Setting the Release Year for the Movie/TV Show
         ((TextView) view.findViewById(R.id.imageText)).setText(Release_Year);
 
+        ((TextView) view.findViewById(R.id.ID_val)).setText(cursor_values[2]);
+
     }
 
-    public void clearIDsList() {
+/*    public void clearIDsList() {
 
         if (IDs != null) {
             IDs.clear();
         }
-    }
+    }*/
 }

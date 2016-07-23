@@ -22,18 +22,15 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mahes_000.moviesapp_udacity.Adapters.GridViewAdapter;
 import com.example.mahes_000.moviesapp_udacity.Adapters.MovieCursorAdapter;
-import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchMovieData;
-import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
-/*import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;*/
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.concurrent.ExecutionException;
 
 
@@ -41,11 +38,9 @@ import java.util.concurrent.ExecutionException;
  * A placeholder fragment containing a simple view.
  */
 
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, FetchMovieDataInterface{
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> { //, FetchMovieDataInterface
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
-
-    String[] final_values = null;
 
     private GridView gridView;
     private ProgressBar progressBar;
@@ -64,7 +59,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     private Parcelable gridState = null;
     private static final String LIST_STATE = "liststate";
 
+/*
     ArrayList<String> movie_desc = new ArrayList<>();
+*/
 
     // This is used to select between the "popular" and "top_rated"
     String Movies_Choice = "top_rated";
@@ -101,14 +98,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
 */
 
-        mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0, MainActivityFragment.this);
+        mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0);
 
         gridView.setAdapter(mMovieCursorAdapter);
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, movie_desc.get(position));
+                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, ((TextView)view.findViewById(R.id.ID_val)).getText()); //movie_desc.get(position));
 
                 startActivity(toDetailActivity);
             }
@@ -163,7 +160,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             Log.d("MainActivityFragment", "trying to restore gridView state..");
         }
 
+/*
         mMovieCursorAdapter.clearIDsList();
+*/
         gridState = null;
         super.onResume();
 
@@ -186,11 +185,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             Log.i(LOG_TAG, "Inside LoadMoreData ");
 
             try {
-                final_values = movieData.execute(Movies_Choice, Video_Choice, page).get();
 
-                Log.i(LOG_TAG, "final values: " + final_values);
-
-                //Collections.addAll(movie_desc, final_values);
+                movieData.execute(Movies_Choice, Video_Choice, page).get();
 
                 mMovieCursorAdapter.notifyDataSetChanged();
 
@@ -203,7 +199,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }
         } else {
             //mGridData.clear();
-            movie_desc.clear();
+            //movie_desc.clear();
             Toast.makeText(getActivity(), "Unable to get more movies, No Internet available.\nConnect to the internet and Re-open the App", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -227,15 +223,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         if (isNetworkAvailable()) {
            // mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
-            movie_desc.clear(); // resetting all Movie Details
+         //   movie_desc.clear(); // resetting all Movie Details
+/*
             mMovieCursorAdapter.clearIDsList();
+*/
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
             FetchMovieData movieData = new FetchMovieData(getActivity());/*, MainActivityFragment.this);*/
 
             try {
-                final_values = movieData.execute(Movies_Choice, Video_Choice, "1").get();
 
-                //Collections.addAll(movie_desc, final_values);
+                movieData.execute(Movies_Choice, Video_Choice, "1").get();
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -247,12 +244,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 e.printStackTrace();
             }
 
-            //getMovieData(Movies_Choice, Video_Choice, "1");
             progressBar.setVisibility(View.GONE);
             mMovieCursorAdapter.notifyDataSetChanged();
         } else {
-           // mGridData.clear();
-            movie_desc.clear();
             Toast.makeText(getActivity(), "Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
         }
     }
@@ -274,7 +268,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
+/*
         mMovieCursorAdapter.clearIDsList();
+*/
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
@@ -309,6 +305,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         mMovieCursorAdapter.swapCursor(null);
     }
 
+/*
     @Override
     public void onDownloadComplete(ArrayList<ImageItem> gridData) {
 
@@ -320,7 +317,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     }
 
     @Override
-    public void getIds(ArrayList<String> Movie_IDs) {
-        movie_desc = Movie_IDs;
-    }
+    public void getIds(LinkedHashSet<String> Movie_IDs) {
+        movie_desc.clear();
+        movie_desc.addAll(Movie_IDs);
+        Log.d(LOG_TAG, "Inside getIds Ids List is " + movie_desc);
+    }*/
 }

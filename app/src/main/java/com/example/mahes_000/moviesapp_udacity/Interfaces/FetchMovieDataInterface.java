@@ -4,6 +4,7 @@ import com.example.mahes_000.moviesapp_udacity.DataModels.ImageItem;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
 /**
  * Created by mahes_000 on 7/16/2016.
@@ -14,5 +15,5 @@ public interface FetchMovieDataInterface {
 
         void onDownloadReviews();
 
-        void getIds(ArrayList<String> Movie_IDs);
+        void getIds(LinkedHashSet<String> Movie_IDs);
 }
