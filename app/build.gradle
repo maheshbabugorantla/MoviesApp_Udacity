@@ -4,7 +4,7 @@ android {
     signingConfigs {
         MoviesApp_Release {
             keyAlias 'Blah'
-            keyPassword 'Blah'
+            keyPassword 'BlahBlah'
             storeFile file('C:/Users/mahes_000/Android_Release_KeyStore/MoviesApp_Udacity.jks')
             storePassword 'Blah'
         }
