@@ -1,10 +1,13 @@
 package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -36,9 +40,11 @@ import java.util.concurrent.ExecutionException;
  */
 public class MovieDetailsActivityFragment extends Fragment {
 
-    String Movies_Data = null;
-    String[] final_values = null;
-    String Video_Choice = null;
+    private String Movies_Data = null;
+    private String[] final_values = null;
+    private String Video_Choice = null;
+
+    private Context mContext;
 
     public MovieDetailsActivityFragment() {
         setHasOptionsMenu(true);
@@ -66,30 +72,53 @@ public class MovieDetailsActivityFragment extends Fragment {
 
         boolean networkStatus = isNetworkAvailable();
 
+        mContext = getContext();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        Video_Choice = sharedPreferences.getString(mContext.getString(R.string.pref_video_choice_key), mContext.getString(R.string.pref_video_choice_default));
+
+        // Used as Projections to fetch the Specific Movie/TV Show Details
+        String[] Movie_Columns = {MovieContract.MovieEntry.COLUMN_OVERVIEW, MovieContract.MovieEntry.COLUMN_RELEASE_DATE, MovieContract.MovieEntry.COLUMN_TITLE, MovieContract.MovieEntry.COLUMN_VOTE_AVERAGE, MovieContract.MovieEntry.COLUMN_POSTER_PATH};
+
+        String[] TV_Columns = {MovieContract.TVEntry.COLUMN_OVERVIEW, MovieContract.TVEntry.COLUMN_RELEASE_DATE, MovieContract.TVEntry.COLUMN_TITLE, MovieContract.TVEntry.COLUMN_VOTE_AVERAGE, MovieContract.TVEntry.COLUMN_POSTER_PATH};
+
+        // Order of the Rows
+        int COL_OVERVIEW_INDEX = 0;
+        int COL_RELEASE_DATE_INDEX = 1;
+        int COL_TITLE_INDEX = 2;
+        int COL_VOTE_AVERAGE_INDEX = 3;
+        int COL_POSTER_PATH_INDEX = 4;
+
         if ((intent != null) && intent.hasExtra(Intent.EXTRA_TEXT) && networkStatus) {
+
             String text_detail = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-            String[] str_values = text_detail.split("=");
+            // Fetching the Movie or TVShow Details
+            Cursor movie_Details = null;
 
-            String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
-            String Image_URL = Image_Base_URL + str_values[0];
+            if(Video_Choice.equals("movie")) {
+                movie_Details = getContext().getContentResolver().query(MovieContract.MovieEntry.buildMovieUri(Long.parseLong(text_detail)), Movie_Columns, null, null, null);
+            }
+            else if(Video_Choice.equals("tv"))
+            {
+                movie_Details = getContext().getContentResolver().query(MovieContract.TVEntry.buildTVUri(Long.parseLong(text_detail)), TV_Columns, null, null, null);
+            }
 
-            // Setting the Image for the Poster
-            Picasso.with(getActivity()).load(Image_URL).fit().into((ImageView) rootView.findViewById(R.id.details_poster));
+            if(movie_Details.moveToFirst()) {
+                String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
+                String Image_URL = Image_Base_URL + movie_Details.getString(COL_POSTER_PATH_INDEX);
 
-            ((TextView) rootView.findViewById(R.id.movie_title)).setText(str_values[2]); // Movie Title
-            ((TextView) rootView.findViewById(R.id.story_detail)).setText(str_values[1]); // Movie Story
-            ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(str_values[3] + "/10"); // User Rating Value
+                // Setting the Image for the Poster
+                Picasso.with(getActivity()).load(Image_URL).fit().into((ImageView) rootView.findViewById(R.id.details_poster));
 
-            ((TextView) rootView.findViewById(R.id.release_date_value)).setText(str_values[5].split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
+                ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie_Details.getString(COL_TITLE_INDEX)); // Movie Title
+                ((TextView) rootView.findViewById(R.id.story_detail)).setText(movie_Details.getString(COL_OVERVIEW_INDEX)); // Movie Story
+                ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(movie_Details.getString(COL_VOTE_AVERAGE_INDEX) + "/10"); // User Rating Value
 
-            /*
-            *   6. Video_Choice
-            *   7. Id
-            * */
+                ((TextView) rootView.findViewById(R.id.release_date_value)).setText(movie_Details.getString(COL_RELEASE_DATE_INDEX).split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
+            }
 
-            Video_Choice = str_values[6];
-            String Movie_ID = str_values[7];
+            String Movie_ID = text_detail;
 
             // Fetching the Data for the Movie.
             getMovieData(Movie_ID, Video_Choice);

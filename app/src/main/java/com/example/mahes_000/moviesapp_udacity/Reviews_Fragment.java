@@ -2,9 +2,11 @@ package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,7 @@ import java.util.concurrent.ExecutionException;
 public class Reviews_Fragment extends Fragment {
 
     String Video_Choice = null;
+    private Context mContext;
 
     private static final String LOG_TAG = Reviews_Fragment.class.getSimpleName();
 
@@ -57,18 +60,20 @@ public class Reviews_Fragment extends Fragment {
         Intent intent = getActivity().getIntent();
         boolean NetworkStatus = isNetworkAvailable();
 
+        mContext = getContext();
+
         // Setting the Adapter for the ListView
         ArrayList<ReviewItem> reviews = new ArrayList<>();
-        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(getContext(), reviews);
+        ReviewsAdapter reviewsAdapter = new ReviewsAdapter(mContext, reviews);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        Video_Choice = sharedPreferences.getString(mContext.getString(R.string.pref_video_choice_key), mContext.getString(R.string.pref_video_choice_default));
 
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && NetworkStatus)
         {
             String intent_text = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-            String[] intent_values = intent_text.split("=");
-
-            String ID = intent_values[7];
-            Video_Choice = intent_values[6];
+            String ID = intent_text;
 
             reviews.clear();
 

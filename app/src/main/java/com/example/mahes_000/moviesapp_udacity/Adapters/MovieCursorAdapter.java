@@ -34,26 +34,18 @@ public class MovieCursorAdapter extends CursorAdapter {
 
     private String Video_Choice = "movie";
 
-/*
-    private LinkedHashSet<String> IDs = new LinkedHashSet<>();
-*/
+    public MovieCursorAdapter(Context context, Cursor cursor, int flags) {
 
-    private FetchMovieDataInterface mFetchMovieDataInterface;
-
-    public MovieCursorAdapter(Context context, Cursor cursor, int flags) { //, FetchMovieDataInterface activityContext)
         super(context, cursor, flags);
 
         this.mContext = context;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Video_Choice = sharedPreferences.getString(context.getString(R.string.pref_video_choice_key), context.getString(R.string.pref_video_choice_default));
 
-/*
-        this.mFetchMovieDataInterface = activityContext;
-*/
-
     }
 
     private String convertCursortoData(Cursor cursor) {
+
         // Image Path
         int image_thumb = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
 
@@ -63,27 +55,13 @@ public class MovieCursorAdapter extends CursorAdapter {
         if (Video_Choice.equals("movie")) {
 
             release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
-/*
-            IDs.add(cursor.getString(cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID)));
-*/
             movie_id = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
 
         } else {
 
             release_date = cursor.getColumnIndex(TVEntry.COLUMN_RELEASE_DATE);
-/*
-            IDs.add(cursor.getString(cursor.getColumnIndex(TVEntry.COLUMN_TV_ID)));
-*/
             movie_id = cursor.getColumnIndex(TVEntry.COLUMN_TV_ID);
         }
-
-/*
-        mFetchMovieDataInterface.getIds(IDs);
-*/
-
-/*
-        Log.i("Inside convertCursor", IDs.toString());
-*/
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(cursor.getString(release_date))
@@ -124,11 +102,4 @@ public class MovieCursorAdapter extends CursorAdapter {
         ((TextView) view.findViewById(R.id.ID_val)).setText(cursor_values[2]);
 
     }
-
-/*    public void clearIDsList() {
-
-        if (IDs != null) {
-            IDs.clear();
-        }
-    }*/
 }
