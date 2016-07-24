@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.example.mahes_000.moviesapp_udacity.Interfaces.FetchMovieDataInterface;
 import com.example.mahes_000.moviesapp_udacity.R;
 
+import com.example.mahes_000.moviesapp_udacity.Utility;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.MovieEntry;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract.TVEntry;
 import com.squareup.picasso.Picasso;
@@ -34,43 +35,50 @@ public class MovieCursorAdapter extends CursorAdapter {
 
     private String Video_Choice = "movie";
 
+    SharedPreferences sharedPreferences;
+
     public MovieCursorAdapter(Context context, Cursor cursor, int flags) {
 
         super(context, cursor, flags);
 
         this.mContext = context;
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Video_Choice = sharedPreferences.getString(context.getString(R.string.pref_video_choice_key), context.getString(R.string.pref_video_choice_default));
-
+        Video_Choice = Utility.getVideoChoice(context);
     }
 
     private String convertCursortoData(Cursor cursor) {
 
+        Video_Choice = Utility.getVideoChoice(mContext);
+
         // Image Path
-        int image_thumb = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
+          if(cursor != null) {
 
-        int release_date;
-        int movie_id = 0;
+              int image_thumb = cursor.getColumnIndex(MovieEntry.COLUMN_POSTER_PATH);
 
-        if (Video_Choice.equals("movie")) {
+              int release_date;
+              int movie_id = 0;
 
-            release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
-            movie_id = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
+              if (Video_Choice.equals("movie")) {
 
-        } else {
+                  release_date = cursor.getColumnIndex(MovieEntry.COLUMN_RELEASE_DATE);
+                  movie_id = cursor.getColumnIndex(MovieEntry.COLUMN_MOVIE_ID);
 
-            release_date = cursor.getColumnIndex(TVEntry.COLUMN_RELEASE_DATE);
-            movie_id = cursor.getColumnIndex(TVEntry.COLUMN_TV_ID);
-        }
+              } else {
 
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(cursor.getString(release_date))
-                .append("=")
-                .append(cursor.getString(image_thumb))
-                .append("=")
-                .append(cursor.getString(movie_id));
+                  release_date = cursor.getColumnIndex(TVEntry.COLUMN_RELEASE_DATE);
+                  movie_id = cursor.getColumnIndex(TVEntry.COLUMN_TV_ID);
+              }
 
-        return stringBuilder.toString();
+              StringBuilder stringBuilder = new StringBuilder();
+              stringBuilder.append(cursor.getString(release_date))
+                      .append("=")
+                      .append(cursor.getString(image_thumb))
+                      .append("=")
+                      .append(cursor.getString(movie_id));
+
+//              cursor.close();
+              return stringBuilder.toString();
+          }
+        return null;
     }
 
     /* Remember that these views will be reused as required */
@@ -88,18 +96,19 @@ public class MovieCursorAdapter extends CursorAdapter {
 
         String cursor_value = convertCursortoData(cursor);
 
-        String[] cursor_values = cursor_value.split("=");
+        if (cursor_value != null) {
+            String[] cursor_values = cursor_value.split("=");
 
-        String Image_Path = "http://image.tmdb.org/t/p/w342/" + cursor_values[1];
-        String Release_Year = cursor_values[0].split("-")[0];
+            String Image_Path = "http://image.tmdb.org/t/p/w342/" + cursor_values[1];
+            String Release_Year = cursor_values[0].split("-")[0];
 
-        // Setting the Image ThumbNail
-        Picasso.with(mContext).load(Image_Path).fit().into((ImageView) view.findViewById(R.id.imageIcon));
+            // Setting the Image ThumbNail
+            Picasso.with(mContext).load(Image_Path).fit().into((ImageView) view.findViewById(R.id.imageIcon));
 
-        // Setting the Release Year for the Movie/TV Show
-        ((TextView) view.findViewById(R.id.imageText)).setText(Release_Year);
+            // Setting the Release Year for the Movie/TV Show
+            ((TextView) view.findViewById(R.id.imageText)).setText(Release_Year);
 
-        ((TextView) view.findViewById(R.id.ID_val)).setText(cursor_values[2]);
-
+            ((TextView) view.findViewById(R.id.ID_val)).setText(cursor_values[2]);
+        }
     }
 }

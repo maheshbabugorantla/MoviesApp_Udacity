@@ -2,13 +2,11 @@ package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +37,8 @@ import java.util.concurrent.ExecutionException;
 
 /**
  * Created by Mahesh Babu Gorantla on 7/9/2016.
+ *
+ * This Fragment is used to display a List of Video Trailers for a Specific Movie or TV Show.
  */
 public class Video_Fragment extends Fragment {
 
@@ -49,38 +49,24 @@ public class Video_Fragment extends Fragment {
 
     private Context mContext;
 
-    private boolean isNetworkAvailable() {
-        /*
-            Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
-            Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
-            Calling getActivity() will return the Context of the App.
-        */
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View Video_View = inflater.inflate(R.layout.fragment_videos, container, false);
 
         Intent intent = getActivity().getIntent();
 
-        boolean isNetworkAvailable = isNetworkAvailable();
+        boolean isNetworkAvailable = Utility.isNetworkAvailable(getActivity());
 
         ArrayList<VideoItem> videos;
 
         mContext = getContext();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        Video_Choice = sharedPreferences.getString(mContext.getString(R.string.pref_video_choice_key), mContext.getString(R.string.pref_video_choice_default));
+        Video_Choice = Utility.getVideoChoice(mContext);
 
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && isNetworkAvailable) {
-            String intent_text = intent.getStringExtra(Intent.EXTRA_TEXT);
 
-            String ID = intent_text;
+            String ID = intent.getStringExtra(Intent.EXTRA_TEXT);
 
             // Fetching the Movie/TV Show URLs
             getMovieData(ID, Video_Choice);

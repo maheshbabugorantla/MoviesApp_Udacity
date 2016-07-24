@@ -1,15 +1,11 @@
 package com.example.mahes_000.moviesapp_udacity;
 
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
 import android.support.v4.app.LoaderManager;
@@ -25,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.mahes_000.moviesapp_udacity.Adapters.GridViewAdapter;
 import com.example.mahes_000.moviesapp_udacity.Adapters.MovieCursorAdapter;
 import com.example.mahes_000.moviesapp_udacity.FetchDataTasks.FetchMovieData;
 import com.example.mahes_000.moviesapp_udacity.moviedata.MovieContract;
@@ -44,17 +39,19 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private GridView gridView;
     private ProgressBar progressBar;
-    private GridViewAdapter gridViewAdapter;
+//    private GridViewAdapter gridViewAdapter;
     //private ArrayList<ImageItem> mGridData;
 
     private MovieCursorAdapter mMovieCursorAdapter;
 
     // Identifier for CURSOR Loader
-    private static final int FORECAST_LOADER = 0;
+    private static final int MOVIES_LOADER = 0;
 
+/*
     String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
 
     int scrollIndex = 0;
+*/
 
     private Parcelable gridState = null;
     private static final String LIST_STATE = "liststate";
@@ -71,19 +68,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         setHasOptionsMenu(true);
     }
 
-    private boolean isNetworkAvailable() {
-        /*
-            Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
-            Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
-            Calling getActivity() will return the Context of the App.
-        */
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -92,11 +76,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-
-/*
-        mGridData = new ArrayList<>();
-        gridViewAdapter = new GridViewAdapter(getContext(), R.layout.grid_item_layout, mGridData);
-*/
 
         mMovieCursorAdapter = new MovieCursorAdapter(getActivity(), null, 0);
 
@@ -131,7 +110,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
-        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
+        getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
         if (savedInstanceState != null) {
             gridState = savedInstanceState.getParcelable(LIST_STATE);
@@ -153,16 +132,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume() {
 
-        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
+
+        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
 
         if (gridState != null) {
             gridView.onRestoreInstanceState(gridState);
             Log.d("MainActivityFragment", "trying to restore gridView state..");
         }
 
-/*
-        mMovieCursorAdapter.clearIDsList();
-*/
         gridState = null;
         super.onResume();
 
@@ -170,8 +147,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onPause() {
+
 //        scrollIndex = gridView.getFirstVisiblePosition();
-//        gridState = gridView.onSaveInstanceState();
+        gridState = gridView.onSaveInstanceState();
         Log.d("MainActivityFragment", "trying to save gridView state..");
         super.onPause();
     }
@@ -179,7 +157,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     public boolean LoadMoreData(String page) {
 
-        if (isNetworkAvailable()) {
+        if (Utility.isNetworkAvailable(getActivity())) {
             FetchMovieData movieData = new FetchMovieData(getActivity()); /*MainActivityFragment.this);*/
 
             Log.i(LOG_TAG, "Inside LoadMoreData ");
@@ -198,8 +176,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 e.printStackTrace();
             }
         } else {
-            //mGridData.clear();
-            //movie_desc.clear();
             Toast.makeText(getActivity(), "Unable to get more movies, No Internet available.\nConnect to the internet and Re-open the App", Toast.LENGTH_LONG).show();
             return false;
         }
@@ -214,19 +190,17 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         Log.d("Inside OnStart Function", "onStart Started");
 
+/*
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
-        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
+*/
+        Movies_Choice = Utility.getRatingChoice(getActivity()); //sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
+        Video_Choice = Utility.getVideoChoice(getActivity()); //sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
 
         System.out.println("Movies Choice " + Movies_Choice);
         System.out.println("Videos Choice " + Video_Choice);
 
-        if (isNetworkAvailable()) {
-           // mGridData.clear(); // Clear all the data related to a Specific Video Type ("TV" or "Movie")
-         //   movie_desc.clear(); // resetting all Movie Details
-/*
-            mMovieCursorAdapter.clearIDsList();
-*/
+        if (Utility.isNetworkAvailable(getActivity())) {
+
             Log.d("MainActivityFragment ", "Inside OnStart() Function");
             FetchMovieData movieData = new FetchMovieData(getActivity());/*, MainActivityFragment.this);*/
 
@@ -251,30 +225,11 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
     }
 
-/*
-    @Override
-    public void onDownloadComplete(ArrayList<ImageItem> gridData) {
-        mGridData.addAll(gridData);
-        gridViewAdapter.setGridData(mGridData);
-        gridViewAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onDownloadReviews() {
-        return;
-    }
-*/
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-/*
-        mMovieCursorAdapter.clearIDsList();
-*/
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        Movies_Choice = sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
-        Video_Choice = sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
+        Movies_Choice =  Utility.getRatingChoice(getActivity());
+        Video_Choice = Utility.getVideoChoice(getActivity());
 
         // The code below is used to query the database
         String sortOrder;
@@ -296,30 +251,16 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mMovieCursorAdapter.swapCursor(data);
         mMovieCursorAdapter.notifyDataSetChanged();
+        mMovieCursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+        Log.i("Inside onLoaderReset", "Swapped the Cursor");
+
+        mMovieCursorAdapter.notifyDataSetChanged();
         mMovieCursorAdapter.swapCursor(null);
     }
-
-/*
-    @Override
-    public void onDownloadComplete(ArrayList<ImageItem> gridData) {
-
-    }
-
-    @Override
-    public void onDownloadReviews() {
-
-    }
-
-    @Override
-    public void getIds(LinkedHashSet<String> Movie_IDs) {
-        movie_desc.clear();
-        movie_desc.addAll(Movie_IDs);
-        Log.d(LOG_TAG, "Inside getIds Ids List is " + movie_desc);
-    }*/
 }

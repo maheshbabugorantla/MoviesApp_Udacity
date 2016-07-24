@@ -3,8 +3,6 @@ package com.example.mahes_000.moviesapp_udacity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -50,19 +48,6 @@ public class MovieDetailsActivityFragment extends Fragment {
         setHasOptionsMenu(true);
     }
 
-    private boolean isNetworkAvailable() {
-        /*
-            Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
-            Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
-            Calling getActivity() will return the Context of the App.
-        */
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Creating a rootView
@@ -70,7 +55,7 @@ public class MovieDetailsActivityFragment extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
-        boolean networkStatus = isNetworkAvailable();
+        boolean networkStatus = Utility.isNetworkAvailable(getActivity());
 
         mContext = getContext();
 
@@ -104,18 +89,30 @@ public class MovieDetailsActivityFragment extends Fragment {
                 movie_Details = getContext().getContentResolver().query(MovieContract.TVEntry.buildTVUri(Long.parseLong(text_detail)), TV_Columns, null, null, null);
             }
 
-            if(movie_Details.moveToFirst()) {
-                String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
-                String Image_URL = Image_Base_URL + movie_Details.getString(COL_POSTER_PATH_INDEX);
+            try {
+                if (movie_Details.moveToFirst()) {
+                    String Image_Base_URL = "http://image.tmdb.org/t/p/w185/";
+                    String Image_URL = Image_Base_URL + movie_Details.getString(COL_POSTER_PATH_INDEX);
 
-                // Setting the Image for the Poster
-                Picasso.with(getActivity()).load(Image_URL).fit().into((ImageView) rootView.findViewById(R.id.details_poster));
+                    // Setting the Image for the Poster
+                    Picasso.with(getActivity()).load(Image_URL).fit().into((ImageView) rootView.findViewById(R.id.details_poster));
 
-                ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie_Details.getString(COL_TITLE_INDEX)); // Movie Title
-                ((TextView) rootView.findViewById(R.id.story_detail)).setText(movie_Details.getString(COL_OVERVIEW_INDEX)); // Movie Story
-                ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(movie_Details.getString(COL_VOTE_AVERAGE_INDEX) + "/10"); // User Rating Value
+                    ((TextView) rootView.findViewById(R.id.movie_title)).setText(movie_Details.getString(COL_TITLE_INDEX)); // Movie Title
+                    ((TextView) rootView.findViewById(R.id.story_detail)).setText(movie_Details.getString(COL_OVERVIEW_INDEX)); // Movie Story
+                    ((TextView) rootView.findViewById(R.id.user_rating_value)).setText(movie_Details.getString(COL_VOTE_AVERAGE_INDEX) + "/10"); // User Rating Value
 
-                ((TextView) rootView.findViewById(R.id.release_date_value)).setText(movie_Details.getString(COL_RELEASE_DATE_INDEX).split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
+                    ((TextView) rootView.findViewById(R.id.release_date_value)).setText(movie_Details.getString(COL_RELEASE_DATE_INDEX).split("-")[0]);  // Release Date (Movie) or First Aired Date (TV)
+
+                /* Freeing the Cursor to release the Resources */
+
+                    if (!movie_Details.isClosed()) {
+                        movie_Details.close();
+                    }
+                }
+            }
+
+            catch(NullPointerException e) {
+                e.printStackTrace();
             }
 
             String Movie_ID = text_detail;

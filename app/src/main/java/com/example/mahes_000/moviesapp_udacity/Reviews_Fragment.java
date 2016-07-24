@@ -2,11 +2,7 @@ package com.example.mahes_000.moviesapp_udacity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,26 +35,14 @@ public class Reviews_Fragment extends Fragment {
 
     private static final String LOG_TAG = Reviews_Fragment.class.getSimpleName();
 
-    private boolean isNetworkAvailable() {
-        /*
-            Here I have to use getActivity() for getSystemService() Function is because the getSystemService() function will require context.
-            Hence, using getActivity() will give us the context of the Activity in the Non-Activity Class and also as getActivity() extends Context.
-            Calling getActivity() will return the Context of the App.
-        */
-
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View Reviews_View = inflater.inflate(R.layout.fragment_reviews, container, false);
 
         Intent intent = getActivity().getIntent();
-        boolean NetworkStatus = isNetworkAvailable();
+
+        boolean NetworkStatus = Utility.isNetworkAvailable(getActivity());
 
         mContext = getContext();
 
@@ -66,14 +50,11 @@ public class Reviews_Fragment extends Fragment {
         ArrayList<ReviewItem> reviews = new ArrayList<>();
         ReviewsAdapter reviewsAdapter = new ReviewsAdapter(mContext, reviews);
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
-        Video_Choice = sharedPreferences.getString(mContext.getString(R.string.pref_video_choice_key), mContext.getString(R.string.pref_video_choice_default));
+        Video_Choice = Utility.getVideoChoice(mContext);
 
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT) && NetworkStatus)
         {
-            String intent_text = intent.getStringExtra(Intent.EXTRA_TEXT);
-
-            String ID = intent_text;
+            String ID = intent.getStringExtra(Intent.EXTRA_TEXT);
 
             reviews.clear();
 
