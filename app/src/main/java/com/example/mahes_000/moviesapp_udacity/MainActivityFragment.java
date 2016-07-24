@@ -1,7 +1,6 @@
 package com.example.mahes_000.moviesapp_udacity;
 
 
-
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -84,7 +83,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, ((TextView)view.findViewById(R.id.ID_val)).getText()); //movie_desc.get(position));
+                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, ((TextView) view.findViewById(R.id.ID_val)).getText()); //movie_desc.get(position));
 
                 startActivity(toDetailActivity);
             }
@@ -132,12 +131,28 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onResume() {
 
+        Log.d(LOG_TAG, "onResume: Before if Rating Choice: " + Movies_Choice + " Video Choice: " + Video_Choice);
 
-        getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+        if ((Video_Choice.equals(Utility.getVideoChoice(getActivity()))) && (Movies_Choice.equals(Utility.getRatingChoice(getActivity())))) {
+            getLoaderManager().restartLoader(MOVIES_LOADER, null, this);
+
+            Movies_Choice = Utility.getRatingChoice(getActivity());
+
+            Log.d(LOG_TAG, "Restarting the Loader");
+        }
+        else
+        {
+            getLoaderManager().initLoader(MOVIES_LOADER, null, this);
+        }
+/*
+        else {
+
+        }
+*/
 
         if (gridState != null) {
             gridView.onRestoreInstanceState(gridState);
-            Log.d("MainActivityFragment", "trying to restore gridView state..");
+            Log.d(LOG_TAG, "trying to restore gridView state..");
         }
 
         gridState = null;
@@ -190,11 +205,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         Log.d("Inside OnStart Function", "onStart Started");
 
-/*
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-*/
-        Movies_Choice = Utility.getRatingChoice(getActivity()); //sharedPreferences.getString(getString(R.string.pref_rating_choice_key), getString(R.string.pref_rating_choice_default));
-        Video_Choice = Utility.getVideoChoice(getActivity()); //sharedPreferences.getString(getString(R.string.pref_video_choice_key), getString(R.string.pref_video_choice_default));
+        Movies_Choice = Utility.getRatingChoice(getActivity());
+        Video_Choice = Utility.getVideoChoice(getActivity());
 
         System.out.println("Movies Choice " + Movies_Choice);
         System.out.println("Videos Choice " + Video_Choice);
@@ -228,7 +240,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        Movies_Choice =  Utility.getRatingChoice(getActivity());
+        Movies_Choice = Utility.getRatingChoice(getActivity());
         Video_Choice = Utility.getVideoChoice(getActivity());
 
         // The code below is used to query the database
