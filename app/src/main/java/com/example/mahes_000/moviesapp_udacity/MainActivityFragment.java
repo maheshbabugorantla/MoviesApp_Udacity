@@ -38,26 +38,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     private GridView gridView;
     private ProgressBar progressBar;
-//    private GridViewAdapter gridViewAdapter;
-    //private ArrayList<ImageItem> mGridData;
 
     private MovieCursorAdapter mMovieCursorAdapter;
 
     // Identifier for CURSOR Loader
     private static final int MOVIES_LOADER = 0;
 
-/*
-    String Movies_Data = null; // This will contain the raw JSON Data that needs to parsed.
-
-    int scrollIndex = 0;
-*/
-
-/*    private Parcelable gridState = null;*/
-    private static final String LIST_STATE = "liststate";
-
-/*
-    ArrayList<String> movie_desc = new ArrayList<>();
-*/
 
     // This is used to select between the "popular" and "top_rated"
     String Movies_Choice = "top_rated";
@@ -83,7 +69,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, ((TextView) view.findViewById(R.id.ID_val)).getText()); //movie_desc.get(position));
+                Intent toDetailActivity = new Intent(getActivity(), MovieDetailsActivity.class).putExtra(Intent.EXTRA_TEXT, ((TextView) view.findViewById(R.id.ID_val)).getText());
 
                 startActivity(toDetailActivity);
             }

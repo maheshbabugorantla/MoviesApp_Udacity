@@ -79,29 +79,12 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             Log.d(LOG_TAG,"Inside Second If");
         }
 
-/*
-        if(!loading)
-        {
-            if(scrollDirection == SCROLL_DIRECTION_DOWN && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+        /*
+            Here we check if we have crossed the visible Threshold and need to load more
+            data.
 
-                onLoadMore(currentPage + 1, totalItemCount);
-                loading = true;
-
-            } else if (scrollDirection == SCROLL_DIRECTION_UP && firstVisibleItem<=visibleThreshold) {
-
-                onLoadMore(currentPage + 1, totalItemCount);
-                loading = true;
-            }
-        }
-*/
-
-
-            /*
-                Here we check if we have crossed the visible Threshold and need to load more
-                data.
-
-                    REMEMBER: Here the data will not be loading anymore
-            */
+                REMEMBER: Here the data will not be loading anymore
+        */
         if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) >= totalItemCount)
         {
             loading = onLoadMore(currentPage + 1, totalItemCount);

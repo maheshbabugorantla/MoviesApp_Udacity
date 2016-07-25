@@ -4,4 +4,5 @@
     android:name="com.example.mahes_000.moviesapp_udacity.MainActivityFragment"
     tools:layout="@layout/fragment_main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    tools:context=".MainActivityFragment"/>
