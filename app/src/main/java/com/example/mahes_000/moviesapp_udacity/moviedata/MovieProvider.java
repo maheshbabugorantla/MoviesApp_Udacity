@@ -134,6 +134,7 @@ public class MovieProvider extends ContentProvider {
          * happen to the URI and any of its descendants. This allows the content Provider to easily
          * tell the UI when the cursor changes, on operations like a database insert or update.  */
         returnCursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return returnCursor;
     }
 

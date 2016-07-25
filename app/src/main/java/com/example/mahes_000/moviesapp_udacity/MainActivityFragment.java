@@ -52,7 +52,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     int scrollIndex = 0;
 */
 
-    private Parcelable gridState = null;
+/*    private Parcelable gridState = null;*/
     private static final String LIST_STATE = "liststate";
 
 /*
@@ -111,10 +111,12 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         getLoaderManager().initLoader(MOVIES_LOADER, null, this);
 
+/*
         if (savedInstanceState != null) {
             gridState = savedInstanceState.getParcelable(LIST_STATE);
             Log.d("In onActivityCreated", "Retrieving the Saved Instance State");
         }
+*/
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -123,8 +125,8 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onSaveInstanceState(Bundle state) {
         super.onSaveInstanceState(state);
         Log.d("In OnSaveInstanceState", "Saving the state of the app");
-        gridState = gridView.onSaveInstanceState();
-        state.putParcelable(LIST_STATE, gridState);
+/*        gridState = gridView.onSaveInstanceState();
+        state.putParcelable(LIST_STATE, gridState);*/
     }
 
     // This function is called when the fragment is available for the user to Start Interacting
@@ -150,12 +152,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         }
 */
 
+/*
         if (gridState != null) {
             gridView.onRestoreInstanceState(gridState);
             Log.d(LOG_TAG, "trying to restore gridView state..");
         }
 
         gridState = null;
+*/
         super.onResume();
 
     }
@@ -164,7 +168,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
     public void onPause() {
 
 //        scrollIndex = gridView.getFirstVisiblePosition();
-        gridState = gridView.onSaveInstanceState();
+/*        gridState = gridView.onSaveInstanceState();*/
         Log.d("MainActivityFragment", "trying to save gridView state..");
         super.onPause();
     }
@@ -181,7 +185,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
                 movieData.execute(Movies_Choice, Video_Choice, page).get();
 
+/*
                 mMovieCursorAdapter.notifyDataSetChanged();
+*/
 
                 return true;
 
@@ -231,7 +237,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
             }
 
             progressBar.setVisibility(View.GONE);
-            mMovieCursorAdapter.notifyDataSetChanged();
+/*            mMovieCursorAdapter.notifyDataSetChanged();*/
         } else {
             Toast.makeText(getActivity(), "Make Sure that you are connected to Internet and Re-open the App", Toast.LENGTH_LONG).show();
         }
@@ -263,7 +269,9 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+/*
         mMovieCursorAdapter.notifyDataSetChanged();
+*/
         mMovieCursorAdapter.swapCursor(data);
     }
 
@@ -272,7 +280,7 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         Log.i("Inside onLoaderReset", "Swapped the Cursor");
 
-        mMovieCursorAdapter.notifyDataSetChanged();
+        /*mMovieCursorAdapter.notifyDataSetChanged();*/
         mMovieCursorAdapter.swapCursor(null);
     }
 }

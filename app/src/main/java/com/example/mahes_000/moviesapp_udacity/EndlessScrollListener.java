@@ -8,6 +8,9 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
 
     String LOG_TAG = EndlessScrollListener.class.getSimpleName();
 
+    public final static int SCROLL_DIRECTION_UP = 0;
+    public final static int SCROLL_DIRECTION_DOWN = 1;
+
     // The minimum number of items to have below you current scroll position
     // before loading more
     private int visibleThreshold = 5;
@@ -24,8 +27,9 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     // Sets the starting page index
     private int startingPageIndex = 0;
 
-    public EndlessScrollListener()
-    {
+    private int scrollDirection = SCROLL_DIRECTION_DOWN; // Scrolling Down
+
+    public EndlessScrollListener() {
 
     }
 
@@ -63,8 +67,6 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             {
                 this.loading = true; // i.e. the Data is still being loaded.
             }
-
-            Log.d(LOG_TAG,"Inside First If");
         }
 
             /* If it is loading let's check if the data items count has changed */
@@ -77,15 +79,33 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
             Log.d(LOG_TAG,"Inside Second If");
         }
 
+/*
+        if(!loading)
+        {
+            if(scrollDirection == SCROLL_DIRECTION_DOWN && (totalItemCount - visibleItemCount) <= (firstVisibleItem + visibleThreshold)) {
+
+                onLoadMore(currentPage + 1, totalItemCount);
+                loading = true;
+
+            } else if (scrollDirection == SCROLL_DIRECTION_UP && firstVisibleItem<=visibleThreshold) {
+
+                onLoadMore(currentPage + 1, totalItemCount);
+                loading = true;
+            }
+        }
+*/
+
+
             /*
                 Here we check if we have crossed the visible Threshold and need to load more
                 data.
 
                     REMEMBER: Here the data will not be loading anymore
             */
-        if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) > totalItemCount)
+        if (!loading && (firstVisibleItem + visibleItemCount + visibleThreshold) >= totalItemCount)
         {
             loading = onLoadMore(currentPage + 1, totalItemCount);
+
             if(currentPage == 0)
             {
                 currentPage++;
@@ -102,4 +122,20 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     {
         // Take No Action Here.
     }
+
+/*    public int getScrollDirection() {
+        return scrollDirection;
+    }
+
+    public void setScrollDirection(int scrollDirection) {
+        if (scrollDirection == SCROLL_DIRECTION_DOWN || scrollDirection == SCROLL_DIRECTION_UP)
+        { this.scrollDirection = scrollDirection; }
+    }
+
+    public boolean isLoading() {
+        return loading;
+    }
+
+    public void finishedLoading() {
+        this.loading = false;*/
 }

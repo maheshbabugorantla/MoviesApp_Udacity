@@ -35,8 +35,6 @@ public class MovieCursorAdapter extends CursorAdapter {
 
     private String Video_Choice = "movie";
 
-    SharedPreferences sharedPreferences;
-
     public MovieCursorAdapter(Context context, Cursor cursor, int flags) {
 
         super(context, cursor, flags);
@@ -87,6 +85,9 @@ public class MovieCursorAdapter extends CursorAdapter {
 
         View view = LayoutInflater.from(context).inflate(R.layout.grid_item_layout, parent, false);
 
+        ViewHolder viewHolder = new ViewHolder(view);
+        view.setTag(viewHolder);
+
         return view;
     }
 
@@ -96,6 +97,8 @@ public class MovieCursorAdapter extends CursorAdapter {
 
         String cursor_value = convertCursortoData(cursor);
 
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+
         if (cursor_value != null) {
             String[] cursor_values = cursor_value.split("=");
 
@@ -103,12 +106,27 @@ public class MovieCursorAdapter extends CursorAdapter {
             String Release_Year = cursor_values[0].split("-")[0];
 
             // Setting the Image ThumbNail
-            Picasso.with(mContext).load(Image_Path).fit().into((ImageView) view.findViewById(R.id.imageIcon));
+            Picasso.with(mContext).load(Image_Path).fit().into(viewHolder.Video_Icon);
 
             // Setting the Release Year for the Movie/TV Show
-            ((TextView) view.findViewById(R.id.imageText)).setText(Release_Year);
+            (viewHolder.ReleaseYear).setText(Release_Year);
 
-            ((TextView) view.findViewById(R.id.ID_val)).setText(cursor_values[2]);
+            (viewHolder.Video_ID).setText(cursor_values[2]);
+        }
+    }
+
+    public static class ViewHolder {
+
+
+        TextView ReleaseYear;
+        TextView Video_ID;
+        ImageView Video_Icon;
+
+        public ViewHolder(View view) {
+
+            ReleaseYear = (TextView) view.findViewById(R.id.imageText);
+            Video_ID = (TextView) view.findViewById(R.id.ID_val);
+            Video_Icon = (ImageView) view.findViewById(R.id.imageIcon);
         }
     }
 }
